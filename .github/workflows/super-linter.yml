@@ -37,4 +37,4 @@ jobs:
           VALIDATE_CSHARP: true
           VALIDATE_KOTLIN: true
           VALIDATE_CPP: true
-          VALIDATE_CLANG_FORMAT : false 
+
