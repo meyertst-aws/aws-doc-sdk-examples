@@ -24,6 +24,9 @@
 // Look for a bucket among all currently available Amazon S3 buckets.
 bool FindTheBucket(const Aws::S3::S3Client& s3Client,
     const Aws::String& bucketName) {
+    
+    char* test1 = "will the linter catch this?";
+    int test2 = *nullptr;  // or this
 
     Aws::S3::Model::ListBucketsOutcome outcome = s3Client.ListBuckets();
 
