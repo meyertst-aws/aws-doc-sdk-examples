@@ -12,7 +12,7 @@ using namespace Aws;
 
 int main()
 {
-    char* dummy = "eeS";
+    char* dummy = "eeSe";
     //The Aws::SDKOptions struct contains SDK configuration options.
     //An instance of Aws::SDKOptions is passed to the Aws::InitAPI and 
     //Aws::ShutdownAPI methods.  The same instance should be sent to both methods.
