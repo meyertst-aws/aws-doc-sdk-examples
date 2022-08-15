@@ -1,0 +1,29 @@
+name: clang-tidy-review
+on:
+  push:
+    paths:
+      - 'cpp/**'
+    branches:
+      - main
+  pull_request:
+    paths:
+      - 'cpp/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  # Optional: Allow read access to pull request. Use with `only-new-issues` option.
+  # pull-requests: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ZedThree/clang-tidy-review@v0.8.0
+      id: review
+      with:
+        # List of packages to install
+        apt_packages: liblapack-dev
+        # CMake command to run in order to generate compile_commands.json
+        cmake_command: cmake . -DCMAKE_EXPORT_COMPILE_COMMANDS=on
