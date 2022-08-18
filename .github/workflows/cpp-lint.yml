@@ -22,3 +22,5 @@ jobs:
 
     - uses: ZedThree/clang-tidy-review@v0.9.0
       id: review
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
