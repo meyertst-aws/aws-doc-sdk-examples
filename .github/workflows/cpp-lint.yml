@@ -22,9 +22,3 @@ jobs:
 
     - uses: ZedThree/clang-tidy-review@v0.9.0
       id: review
-      with:
-        # List of packages to install
-        apt_packages: liblapack-dev
-        # CMake command to run in order to generate compile_commands.json
-        cmake_command: cmake . -DCMAKE_EXPORT_COMPILE_COMMANDS=on
-        clang_tidy_version: 12
