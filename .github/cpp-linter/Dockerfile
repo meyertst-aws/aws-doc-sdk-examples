@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
 
-COPY requirements.txt /requirements.txt
-
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends\
