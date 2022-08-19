@@ -5,8 +5,8 @@ COPY requirements.txt /requirements.txt
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends\
-    clang-tidy-13 \
-    clang-tidy-14 \
+    clang-tidy-11 \
+    clang-tidy-12 \
     python3 python3-pip && \
     pip3 install --upgrade pip && \
     pip3 install -r requirements.txt
