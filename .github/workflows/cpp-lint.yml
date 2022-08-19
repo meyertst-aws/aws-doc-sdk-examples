@@ -19,8 +19,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - uses: ./.github/cpp-linter
+    
+    - name: Run cpp linter
+      uses: ./.github/cpp-linter
       id: review
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
