@@ -33,4 +33,6 @@ CheckOptions:
     value:           llvm
   - key:             modernize-use-nullptr.NullMacros
     value:           'NULL'
+  - key:             cppcoreguidelines-pro-type-vararg
+    value:           '0'
 ...
