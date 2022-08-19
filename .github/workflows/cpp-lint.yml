@@ -12,7 +12,7 @@ on:
 permissions:
   contents: read
   # Optional: Allow read access to pull request. Use with `only-new-issues` option.
-  pull-requests: read|write
+  pull-requests: write
 jobs:
   build:
     runs-on: ubuntu-latest
