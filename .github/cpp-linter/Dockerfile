@@ -1,12 +1,12 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04.4
 
 COPY requirements.txt /requirements.txt
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends\
-    clang-tidy-11 \
     clang-tidy-12 \
+    Clang-tidy-13 \
     python3 python3-pip && \
     pip3 install --upgrade pip && \
     pip3 install -r requirements.txt
