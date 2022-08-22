@@ -568,6 +568,8 @@ def get_clang_tidy_warnings(
     start = datetime.datetime.now()
     try:
         with message_group(f"Running:\n\t{command}"):
+            subprocess.run("clang-tidy --list-checks", capture_output=True, shell=True, check=True, encoding="utf-8"
+                        )
             output = subprocess.run(
                 command, capture_output=True, shell=True, check=True, encoding="utf-8"
             )
