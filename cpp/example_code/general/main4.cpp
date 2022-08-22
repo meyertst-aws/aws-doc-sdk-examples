@@ -8,6 +8,7 @@
 
 int main()
 {
+    char* test = "some string";
     std::cout << "test" << std::endl;
     return 0;
 }
