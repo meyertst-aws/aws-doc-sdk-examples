@@ -650,14 +650,14 @@ def main(
 
     if files == []:
         print("No files to check!")
-        return
+        return 0
 
     print(f"Checking these files: {files}", flush=True)
 
     line_ranges = get_line_ranges(diff, files)
     if line_ranges == "[]":
         print("No lines added in this PR!")
-        return
+        return 0
 
     print(f"Line filter for clang-tidy:\n{line_ranges}\n")
 
@@ -675,7 +675,7 @@ def main(
         print("No warnings, LGTM!")
         if not dry_run:
             pull_request.post_lgtm_comment(lgtm_comment_body)
-        return
+        return 0
 
     diff_lookup = make_file_line_lookup(diff)
     offset_lookup = make_file_offset_lookup(files)
@@ -693,7 +693,7 @@ def main(
         print("No warnings to report, LGTM!")
         if not dry_run:
             pull_request.post_lgtm_comment(lgtm_comment_body)
-        return
+        return 0
 
     print(f"::set-output name=total_comments::{len(review['comments'])}")
 
@@ -702,14 +702,15 @@ def main(
 
     if trimmed_review["comments"] == []:
         print("Everything already posted!")
-        return review
+        return 1
 
     if dry_run:
         pprint.pprint(review, width=130)
-        return
+        return 1
 
     print("Posting the review:\n", pprint.pformat(trimmed_review), flush=True)
     pull_request.post_review(trimmed_review)
+    return 1
 
 
 def strip_enclosing_quotes(string: str) -> str:
@@ -849,7 +850,7 @@ if __name__ == "__main__":
     elif os.path.exists(build_compile_commands):
         fix_absolute_paths(build_compile_commands, args.base_dir)
 
-    main(
+    result = main(
         repo=args.repo,
         pr_number=args.pr,
         build_dir=args.build_dir,
@@ -863,3 +864,6 @@ if __name__ == "__main__":
         lgtm_comment_body=strip_enclosing_quotes(args.lgtm_comment_body),
         dry_run=args.dry_run,
     )
+
+    exit(1)
+
