@@ -1,4 +1,4 @@
-FROM ubuntu:20.04.4
+FROM ubuntu:20.04.3
 
 COPY requirements.txt /requirements.txt
 
