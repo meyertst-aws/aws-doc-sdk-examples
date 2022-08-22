@@ -29,7 +29,7 @@ from typing import List
 BAD_CHARS_APT_PACKAGES_PATTERN = "[;&|($]"
 DIFF_HEADER_LINE_LENGTH = 5
 FIXES_FILE = "clang_tidy_review.yaml"
-
+HAS_COMPILE_COMMANDS = "HAS_COMPILE_COMMANDS"
 
 class PullRequest:
     """Add some convenience functions not in PyGithub"""
@@ -463,6 +463,9 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir):
     """Create a Github review from a set of clang-tidy diagnostics"""
 
     comments = []
+    ignored_diagnostics = []
+    if not diagnostics[HAS_COMPILE_COMMANDS] :
+        ignored_diagnostics.append("clang-diagnostic-error")
 
     for diagnostic in diagnostics:
         try:
@@ -472,6 +475,13 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir):
             diagnostic_message = diagnostic
             
         if diagnostic_message["FilePath"] == "":
+            continue
+
+        diagnostic_name = diagnostic["DiagnosticName"]
+        print(f"DiagnosticName {diagnostic_name}")
+
+        if diagnostic["DiagnosticName"] in ignored_diagnostics:
+            print(f"ignoring diagnostic {diagnostic_name}")
             continue
 
         comment_body, end_line = make_comment_from_diagnostic(
@@ -555,7 +565,6 @@ def get_clang_tidy_warnings(
     line_filter, build_dir, clang_tidy_checks, clang_tidy_binary, config_file, files
 ):
     """Get the clang-tidy warnings"""
-
     if config_file != "":
         config = f"-config-file=\"{config_file}\""
     else:
@@ -563,14 +572,19 @@ def get_clang_tidy_warnings(
 
     print(f"Using config: {config}")
 
-    command = f"{clang_tidy_binary} -p={build_dir} {config} -line-filter={line_filter} {files} --export-fixes={FIXES_FILE}"
+    if os.path.exists(ps.path.join(build_dirm, "compile_commands.json")) :
+        build_dir_arg = f"-p={build_dir}"
+        has_compile_commands = true
+
+    else:
+        build_dir_arg = ""
+        has_compile_commands = false
+
+    command = f"{clang_tidy_binary} {build_dir_arg} {config} -line-filter={line_filter} {files} --export-fixes={FIXES_FILE}"
 
     start = datetime.datetime.now()
     try:
         with message_group(f"Running:\n\t{command}"):
-            result = subprocess.run("clang-tidy-12 --list-checks", capture_output=True, shell=True, check=True, encoding="utf-8"
-                        )
-            print(result.stdout)
             output = subprocess.run(
                 command, capture_output=True, shell=True, check=True, encoding="utf-8"
             )
@@ -584,9 +598,11 @@ def get_clang_tidy_warnings(
 
     try:
         with open(FIXES_FILE, "r") as fixes_file:
-            return yaml.safe_load(fixes_file)
+            warnings_result = yaml.safe_load(fixes_file)
+            warnings_result[HAS_COMPILE_COMMANDS] = has_compile_commands
+            return warnings_result
     except FileNotFoundError:
-        return {}
+        return {HAS_COMPILE_COMMANDS : has_compile_commands}
 
 
 def cull_comments(pull_request: PullRequest, review, max_comments):
