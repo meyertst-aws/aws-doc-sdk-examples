@@ -568,7 +568,7 @@ def get_clang_tidy_warnings(
     start = datetime.datetime.now()
     try:
         with message_group(f"Running:\n\t{command}"):
-            subprocess.run("clang-tidy --list-checks", capture_output=True, shell=True, check=True, encoding="utf-8"
+            subprocess.run("clang-tidy-12 --list-checks", capture_output=True, shell=True, check=True, encoding="utf-8"
                         )
             output = subprocess.run(
                 command, capture_output=True, shell=True, check=True, encoding="utf-8"
@@ -757,7 +757,7 @@ if __name__ == "__main__":
     parser.add_argument("--repo", help="Repo name in form 'owner/repo'")
     parser.add_argument("--pr", help="PR number", type=int)
     parser.add_argument(
-        "--clang_tidy_binary", help="clang-tidy binary", default="clang-tidy-11"
+        "--clang_tidy_binary", help="clang-tidy binary", default="clang-tidy-12"
     )
     parser.add_argument(
         "--build_dir", help="Directory with compile_commands.json", default="."
