@@ -572,7 +572,7 @@ def get_clang_tidy_warnings(
 
     print(f"Using config: {config}")
 
-    if os.path.exists(os.path.join(build_dirm, "compile_commands.json")) :
+    if os.path.exists(os.path.join(build_dir, "compile_commands.json")) :
         build_dir_arg = f"-p={build_dir}"
         has_compile_commands = true
 
