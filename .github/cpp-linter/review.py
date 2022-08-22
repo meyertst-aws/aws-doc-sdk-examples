@@ -515,7 +515,7 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir):
 
     review = {
         "body": "clang-tidy made some suggestions",
-        "event": "REQUEST_CHANGES",
+        "event": "COMMENT",
         "comments": comments,
     }
     return review
@@ -864,6 +864,6 @@ if __name__ == "__main__":
         lgtm_comment_body=strip_enclosing_quotes(args.lgtm_comment_body),
         dry_run=args.dry_run,
     )
-
-    exit(1)
+    if result == 1 :
+        exit(1)
 
