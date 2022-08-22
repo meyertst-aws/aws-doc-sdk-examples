@@ -515,7 +515,7 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir):
 
     review = {
         "body": "clang-tidy made some suggestions",
-        "event": "COMMENT",
+        "event": "REQUEST_CHANGES",
         "comments": comments,
     }
     return review
