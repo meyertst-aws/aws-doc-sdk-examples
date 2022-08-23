@@ -24,6 +24,7 @@ import yaml
 from github import Github
 from github.Requester import Requester
 from github.PaginatedList import PaginatedList
+from github.CommitComment import CommitComment
 from typing import List
 
 BAD_CHARS_APT_PACKAGES_PATTERN = "[;&|($]"
@@ -41,7 +42,7 @@ class PullRequest:
 
         github = Github(token)
         repo_object = github.get_repo(f"{repo}")
-        self._pull_request = repo_object.get_pull(pr_number)
+        self._pull_request = repo_object .get_pull(pr_number)
 
     def headers(self, media_type: str):
         return {
@@ -82,7 +83,7 @@ class PullRequest:
             return element
 
         return PaginatedList(
-            get_element,
+            CommitComment,
             self._pull_request._requester,
             f"{self.base_url}/comments",
             None,
@@ -574,11 +575,11 @@ def get_clang_tidy_warnings(
 
     if os.path.exists(os.path.join(build_dir, "compile_commands.json")) :
         build_dir_arg = f"-p={build_dir}"
-        has_compile_commands = true
+        has_compile_commands = True
 
     else:
         build_dir_arg = ""
-        has_compile_commands = false
+        has_compile_commands = False
 
     command = f"{clang_tidy_binary} {build_dir_arg} {config} -line-filter={line_filter} {files} --export-fixes={FIXES_FILE}"
 
