@@ -465,10 +465,10 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
     comments = []
     ignored_diagnostics = []
     if not has_compile_commands :
-        # clang-tidy will not be able to find aws-sdk headers, ignore the error generated
+        # Clang-tidy will not be able to find aws-sdk headers. Ignore the error generated for missing headers.
         ignored_diagnostics.append("clang-diagnostic-error")
-        # because of missing headers, clang-tidy generates too many false negatives for the following warnings
-        ignored_diagnostics.append("cppcoreguidelines-init-variables") 
+        # Because of missing headers, clang-tidy generates too many false negatives for the following warnings.
+        ignored_diagnostics.append("cppcoreguidelines-init-variables")
 
     for diagnostic in diagnostics:
         try:
@@ -476,11 +476,11 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
         except KeyError:
             # Pre-clang-tidy-9 format
             diagnostic_message = diagnostic
-            
+
         if diagnostic_message["FilePath"] == "":
             continue
 
-         if diagnostic["DiagnosticName"] in ignored_diagnostics:
+        if diagnostic["DiagnosticName"] in ignored_diagnostics:
             print(f'ignoring diagnostic {diagnostic["DiagnosticName"]}')
             continue
 
