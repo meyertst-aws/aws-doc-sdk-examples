@@ -1,0 +1,16 @@
+---
+MainSourceFile:  '/Users/meyertst/Documents/Development/aws-doc-sdk-examples_my_fork/cpp/example_code/general/main.cpp'
+Diagnostics:
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         '''aws/core/Aws.h'' file not found'
+      FilePath:        '/Users/meyertst/Documents/Development/aws-doc-sdk-examples_my_fork/cpp/example_code/general/main.cpp'
+      FileOffset:      173
+      Replacements:    []
+      Ranges:
+        - FilePath:        '/Users/meyertst/Documents/Development/aws-doc-sdk-examples_my_fork/cpp/example_code/general/main.cpp'
+          FileOffset:      173
+          Length:          16
+    Level:           Error
+    BuildDirectory:  '/Users/meyertst/Documents/Development/aws-doc-sdk-examples_my_fork/cpp/example_code/general'
+...
