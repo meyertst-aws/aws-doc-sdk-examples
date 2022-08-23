@@ -24,7 +24,6 @@ import yaml
 from github import Github
 from github.Requester import Requester
 from github.PaginatedList import PaginatedList
-from github.CommitComment import CommitComment
 from typing import List
 
 BAD_CHARS_APT_PACKAGES_PATTERN = "[;&|($]"
@@ -466,7 +465,10 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
     comments = []
     ignored_diagnostics = []
     if not has_compile_commands :
+        # clang-tidy will not be able to find aws-sdk headers, ignore the error generated
         ignored_diagnostics.append("clang-diagnostic-error")
+        # because of missing headers, clang-tidy generates too many false negatives for the following warnings
+        ignored_diagnostics.append("cppcoreguidelines-init-variables") 
 
     for diagnostic in diagnostics:
         try:
@@ -478,11 +480,8 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
         if diagnostic_message["FilePath"] == "":
             continue
 
-        diagnostic_name = diagnostic["DiagnosticName"]
-        print(f"DiagnosticName {diagnostic_name}")
-
-        if diagnostic["DiagnosticName"] in ignored_diagnostics:
-            print(f"ignoring diagnostic {diagnostic_name}")
+         if diagnostic["DiagnosticName"] in ignored_diagnostics:
+            print(f'ignoring diagnostic {diagnostic["DiagnosticName"]}')
             continue
 
         comment_body, end_line = make_comment_from_diagnostic(
