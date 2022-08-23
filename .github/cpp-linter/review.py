@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
-# clang-tidy review
-# Copyright (c) 2020 Peter Hill
-# SPDX-License-Identifier: MIT
-# See LICENSE for more information
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX - License - Identifier: Apache - 2.0
 
 import argparse
 import contextlib
@@ -469,6 +467,7 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
         ignored_diagnostics.append("clang-diagnostic-error")
         # Because of missing headers, clang-tidy generates too many false negatives for the following warnings.
         ignored_diagnostics.append("cppcoreguidelines-init-variables")
+        ignored_diagnostics.append("cppcoreguidelines-avoid-non-const-global-variables")
 
     for diagnostic in diagnostics:
         try:
