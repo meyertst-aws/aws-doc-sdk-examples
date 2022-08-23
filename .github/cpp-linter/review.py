@@ -460,12 +460,12 @@ def make_comment_from_diagnostic(diagnostic_name, diagnostic, filename ,offset_l
     return comment_body, end_line + 1
 
 
-def make_review(diagnostics, diff_lookup, offset_lookup, build_dir):
+def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_commands):
     """Create a Github review from a set of clang-tidy diagnostics"""
 
     comments = []
     ignored_diagnostics = []
-    if not diagnostics[HAS_COMPILE_COMMANDS] :
+    if not has_compile_commands :
         ignored_diagnostics.append("clang-diagnostic-error")
 
     for diagnostic in diagnostics:
@@ -699,7 +699,8 @@ def main(
 
     with message_group("Creating review from warnings"):
         review = make_review(
-            clang_tidy_warnings["Diagnostics"], diff_lookup, offset_lookup, build_dir
+            clang_tidy_warnings["Diagnostics"], diff_lookup, offset_lookup, build_dir,
+            clang_tidy_warnings[HAS_COMPILE_COMMANDS]
         )
 
     print(
