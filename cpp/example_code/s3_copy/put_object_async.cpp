@@ -15,13 +15,13 @@
 // snippet-start:[s3.cpp.put_object_async.mutex_vars]
 // A mutex is a synchronization primitive that can be used to protect shared 
 // data from being simultaneously accessed by multiple threads.
-std::mutex upload_mutex;
+static std::mutex upload_mutex;
 
 // A condition_variable is a synchronization primitive that can be used to 
 // block a thread, or multiple threads at the same time, until another 
 // thread both modifies a shared variable (the condition) and 
 // notifies the condition_variable. 
-std::condition_variable upload_variable;
+static std::condition_variable upload_variable;
 // snippet-end:[s3.cpp.put_object_async.mutex_vars]
 
 /* ////////////////////////////////////////////////////////////////////////////

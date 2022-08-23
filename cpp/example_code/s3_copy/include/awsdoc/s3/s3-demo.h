@@ -7,7 +7,7 @@
 
 #include <aws/core/Aws.h>
 #include <aws/s3/S3Client.h>
-#include <awsdoc/s3/S3_EXPORTS.h>
+#include "S3_EXPORTS.h"
 
 AWSDOC_S3_API bool FindTheBucket(const Aws::S3::S3Client& s3Client,
     const Aws::String& bucketName);
