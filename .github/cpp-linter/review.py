@@ -83,7 +83,7 @@ class PullRequest:
             return element
 
         return PaginatedList(
-            CommitComment,
+            get_element,
             self._pull_request._requester,
             f"{self.base_url}/comments",
             None,
