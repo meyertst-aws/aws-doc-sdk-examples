@@ -24,3 +24,6 @@ jobs:
         with:
           config_file: ./.github/cpp-linter/clang-tidy-config.txt
           token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+      - name: check docker images
+        run: docker images
