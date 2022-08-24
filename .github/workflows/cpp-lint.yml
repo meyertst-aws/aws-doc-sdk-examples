@@ -19,5 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: check docker images
-        run: docker images
+      - name: Run clang-tidy check
+        uses: ./.github/cpp-linter
+        with:
+          config_file: ./.github/cpp-linter/clang-tidy-config.txt
+          token: ${{ secrets.GITHUB_TOKEN }}
