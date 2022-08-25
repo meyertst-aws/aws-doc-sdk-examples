@@ -1,5 +1,5 @@
 ---
-Checks:          'bugprone-*,cert-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,readability-*,-modernize-use-trailing-return-type,-cppcoreguidelines-pro-type-vararg,-cppcoreguidelines-pro-bounds-pointer-arithmetic'
+Checks:          'clang-analyzer-*,cppcoreguidelines-*,modernize-*,readability-*,google-*,-modernize-use-trailing-return-type,-cppcoreguidelines-pro-bounds-pointer-arithmetic'
 WarningsAsErrors: true
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
