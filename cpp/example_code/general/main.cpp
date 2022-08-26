@@ -1,4 +1,4 @@
-﻿// Copyright Amazon.com, Inc. or its affiliates.All Rights Reserved. 
+// Copyright Amazon.com, Inc. or its affiliates.All Rights Reserved. 
 // SPDX - License - Identifier: Apache - 2.0
 
 // snippet-start:[general.cpp.starter.main]
@@ -17,7 +17,7 @@ int main()
     //Aws::ShutdownAPI methods.  The same instance should be sent to both methods.
     SDKOptions options;
     options.loggingOptions.logLevel = Utils::Logging::LogLevel::Debug;
-    
+      
     //The AWS SDK for C++ must be initialized by calling Aws::InitAPI.
     InitAPI(options); 
     {
