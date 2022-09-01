@@ -20,7 +20,7 @@
 // snippet-end:[s3.cpp.copy_objects.inc]
 
 /* 
- *  
+ *     
  * Prerequisites: Two buckets. One of the buckets must contain the object to 
  * be copied to the other bucket.
  *
