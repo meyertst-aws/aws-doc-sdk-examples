@@ -23,7 +23,7 @@
 // snippet-end:[s3.cpp.create_bucket.inc]
 
 /* 
- * Input:
+ * Input:    
  * - bucketName: The name of the bucket to create. 
  * - region: The AWS Region to create the bucket in.
  * 
