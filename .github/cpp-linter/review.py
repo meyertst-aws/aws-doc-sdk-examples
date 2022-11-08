@@ -586,8 +586,7 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
             continue
 
         # 2022-11-7 Amazon addition
-        if not POST_TO_PR:
-            comment_diagnostic_to_log(diagnostic, source_line, end_line, log_messages, http_prefix)
+        comment_diagnostic_to_log(diagnostic, source_line, end_line, log_messages, http_prefix)
 
         comments.append(
             {
@@ -831,12 +830,12 @@ def main(
         pprint.pprint(review, width=130)
         return 1  # 2022-8-23 Amazon modifications
 
-    if POST_TO_PR:
-        print("Posting the review:\n", pprint.pformat(trimmed_review), flush=True)
-#        pull_request.post_review(trimmed_review) # 2022-11-7 Amazon changed
-    else:
-        for log_message in log_messages:
-            print(log_message)
+ # 2022-11-7 Amazon changed
+#    print("Posting the review:\n", pprint.pformat(trimmed_review), flush=True)
+#    pull_request.post_review(trimmed_review) # 2022-11-7 Amazon changed
+
+    for log_message in log_messages:
+        print(log_message)
 
     return 1  # 2022-8-23 Amazon modifications
 
