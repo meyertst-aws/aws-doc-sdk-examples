@@ -36,6 +36,50 @@ DIFF_HEADER_LINE_LENGTH = 5
 FIXES_FILE = "clang_tidy_review.yaml"
 # 2022-8-23 Amazon addition
 HAS_COMPILE_COMMANDS = "HAS_COMPILE_COMMANDS"
+AWS_DOCS_ACCOUNT = "awsdocs"
+
+# 2022-11-8 Amazon addition start
+class Commit:
+    """Add some convenience functions not in PyGithub"""
+
+
+    def __init__(self, pr_repo: str, head_ref: str, token: str):
+        self.pr_repo = pr_repo #account/repository
+        self.head_ref = head_ref
+        self.token = token
+
+    def headers(self, media_type: str):
+        return {
+            "Accept": f"application/vnd.github.{media_type}",
+            "Authorization": f"token {self.token}",
+        }
+
+    @property
+    def base_url_compare(self):
+        return f"https://api.github.com/repos/{self.pr_repo}/compare"
+
+    def get_for_compare(self, media_type: str, extra: str = "") -> str:
+        url = f"{self.base_url_compare}{extra}"
+
+        response = requests.get(url, headers=self.headers(media_type))
+        response.raise_for_status()
+        return response.text
+
+    def get_commit_diff(self) -> List[unidiff.PatchSet]:
+        """Download the compare diff, return a list of PatchedFile"""
+        diffs = self.get_for_compare("diff", f"/main...{self.head_ref}")
+
+    # PatchSet is the easiest way to construct what we want, but the
+    # diff_line_no property on lines is counted from the top of the
+    # whole PatchSet, whereas GitHub is expecting the "position"
+    # property to be line count within each file's diff. So we need to
+    # do this little bit of faff to get a list of file-diffs with
+    # their own diff_line_no range
+        diff = [unidiff.PatchSet(str(file))[0] for file in unidiff.PatchSet(diffs)]
+
+        return diff
+# 2022-11-8 Amazon addition end
+
 
 class PullRequest:
     """Add some convenience functions not in PyGithub"""
@@ -47,6 +91,7 @@ class PullRequest:
 
         github = Github(token)
         repo_object = github.get_repo(f"{repo}")
+
         self._pull_request = repo_object.get_pull(pr_number)
 
     def headers(self, media_type: str):
@@ -61,6 +106,7 @@ class PullRequest:
 
     def get(self, media_type: str, extra: str = "") -> str:
         url = f"{self.base_url}{extra}"
+
         response = requests.get(url, headers=self.headers(media_type))
         response.raise_for_status()
         return response.text
@@ -464,31 +510,58 @@ def make_comment_from_diagnostic(diagnostic_name, diagnostic, filename ,offset_l
 
     return comment_body, end_line + 1
 
+
+# 2022-11-7 Amazon addition start
+def comment_diagnostic_to_log(diagnostic, source_line, end_line, log_messages, http_prefix):
+
+    if 'DiagnosticMessage' in diagnostic :
+        diagnosticMessage = diagnostic['DiagnosticMessage']
+        message = diagnosticMessage['Message'] + " (" + diagnostic['DiagnosticName'] + ")"
+        file_path = diagnosticMessage['FilePath']
+    else:
+        message = diagnostic['Message']
+        file_path = diagnostic['FilePath']
+
+
+    try:
+        index = file_path.index("cpp/")
+        file_path = file_path[index:]
+        http_path = http_prefix + "/" + file_path
+        http_path = http_path.replace(" ", "%20")
+    except:
+        print(f"error finding 'cpp/' in {file_path}")
+        http_path = file_path
+
+
+    log_messages.append(
+        f"::error ::{message} {http_path}#L{source_line} {file_path}:{source_line}")
+# 2022-11-7 Amazon addition end
+
 # 2022-8-23 Amazon modification
-def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_commands):
+def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_commands, http_prefix): # 2022-11-7 Amazon change
     """Create a Github review from a set of clang-tidy diagnostics"""
 
     comments = []
     # 2022-8-23 Amazon addition
     ignored_diagnostics = []
-    if not has_compile_commands :
+    if not has_compile_commands:
         # Clang-tidy will not be able to find aws-sdk headers. Ignore the error generated for missing headers.
         ignored_diagnostics.append("clang-diagnostic-error")
         # Because of missing headers, clang-tidy generates too many false negatives for the following warnings.
         ignored_diagnostics.append("cppcoreguidelines-init-variables")
         ignored_diagnostics.append("cppcoreguidelines-avoid-non-const-global-variables")
-
+    log_messages = [] # 2022-11-7 Amazon change
     for diagnostic in diagnostics:
         try:
             diagnostic_message = diagnostic["DiagnosticMessage"]
         except KeyError:
             # Pre-clang-tidy-9 format
             diagnostic_message = diagnostic
-            
+
         if diagnostic_message["FilePath"] == "":
             continue
 
-# 2022-8-23 Amazon addition
+        # 2022-8-23 Amazon addition
         if diagnostic["DiagnosticName"] in ignored_diagnostics:
             print(f'ignoring diagnostic {diagnostic["DiagnosticName"]}')
             continue
@@ -515,6 +588,9 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
             )
             continue
 
+        # 2022-11-7 Amazon addition
+        comment_diagnostic_to_log(diagnostic, source_line, end_line, log_messages, http_prefix)
+
         comments.append(
             {
                 "path": rel_path,
@@ -537,7 +613,7 @@ def make_review(diagnostics, diff_lookup, offset_lookup, build_dir, has_compile_
         "event": "COMMENT",
         "comments": comments,
     }
-    return review
+    return [review, log_messages]  # 2022-11-7 Amazon change
 
 
 def get_line_ranges(diff, files):
@@ -582,8 +658,8 @@ def get_clang_tidy_warnings(
 
     print(f"Using config: {config}")
 
-# 2022-8-23 Amazon addition
-    if os.path.exists(os.path.join(build_dir, "compile_commands.json")) :
+    # 2022-8-23 Amazon addition
+    if os.path.exists(os.path.join(build_dir, "compile_commands.json")):
         build_dir_arg = f"-p={build_dir}"
         has_compile_commands = True
 
@@ -600,21 +676,24 @@ def get_clang_tidy_warnings(
                 command, capture_output=True, shell=True, check=True, encoding="utf-8"
             )
     except subprocess.CalledProcessError as e:
-        print(
-            f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}\nOutput was:\n{e.stdout}"
-        )
+        pass
+    # 2022-8-23 Amazon addition (this is usually just the linting suggestions, suppress it)
+#       print(
+#            f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}\nOutput was:\n{e.stdout}"
+#            )
+
     end = datetime.datetime.now()
 
     print(f"Took: {end - start}")
 
-# 2022-8-23 Amazon modifications
+    # 2022-8-23 Amazon modifications
     try:
         with open(FIXES_FILE, "r") as fixes_file:
             warnings_result = yaml.safe_load(fixes_file)
             warnings_result[HAS_COMPILE_COMMANDS] = has_compile_commands
             return warnings_result
     except FileNotFoundError:
-        return {HAS_COMPILE_COMMANDS : has_compile_commands}
+        return {HAS_COMPILE_COMMANDS: has_compile_commands}
 
 
 def cull_comments(pull_request: PullRequest, review, max_comments):
@@ -648,33 +727,49 @@ def cull_comments(pull_request: PullRequest, review, max_comments):
     return review
 
 
+ # 2022-11-7 Amazon changed
 def main(
-    repo,
-    pr_number,
-    build_dir,
-    clang_tidy_checks,
-    clang_tidy_binary,
-    config_file,
-    token,
-    include,
-    exclude,
-    max_comments,
-    lgtm_comment_body,
-    dry_run: bool = False,
+        repo,
+        pr_number,
+        build_dir,
+        clang_tidy_checks,
+        clang_tidy_binary,
+        config_file,
+        token,
+        include,
+        exclude,
+        max_comments,
+        lgtm_comment_body,
+        ref,  # set during workflow runs, not set for PR
+        head_ref, # set for PR, not set during workflows
+        dry_run: bool = True,
 ):
+ # 2022-11-7 Amazon changed start
+    source_actor = os.getenv('GITHUB_ACTOR')
+    if pr_number is not None and pr_number != "":
+        pull_request = PullRequest(repo, int(pr_number), token)
+        diff = pull_request.get_pr_diff()
+        branch = head_ref.replace("'", "");
+    elif ref is not None :
+        branch = ref[ref.rindex("/") + 1:]
+        branch = branch.replace("'", "");
+        commit = Commit(repo, branch, token)
+        diff = commit.get_commit_diff()
+    else:
+        print("No pull request or workflow reference. Unable to review.")
+        return 0
 
-    pull_request = PullRequest(repo, pr_number, token)
-    diff = pull_request.get_pr_diff()
-    print(f"\nDiff from GitHub PR:\n{diff}\n")
-
+    source_repo = source_actor + repo[repo.find("/"):]
+    http_prefix = f"https://github.com/{source_repo}/tree/{branch}"
+ # 2022-11-7 Amazon changed end
     changed_files = [filename.target_file[2:] for filename in diff]
     files = []
     for pattern in include:
         files.extend(fnmatch.filter(changed_files, pattern))
-        print(f"include: {pattern}, file list now: {files}")
+    #        print(f"include: {pattern}, file list now: {files}")  # 2022-11-7 Amazon changed
     for pattern in exclude:
         files = [f for f in files if not fnmatch.fnmatch(f, pattern)]
-        print(f"exclude: {pattern}, file list now: {files}")
+    #        print(f"exclude: {pattern}, file list now: {files}")   # 2022-11-7 Amazon changed
 
     if files == []:
         print("No files to check!")
@@ -685,9 +780,9 @@ def main(
     line_ranges = get_line_ranges(diff, files)
     if line_ranges == "[]":
         print("No lines added in this PR!")
-        return 0 # 2022-8-23 Amazon modifications
+        return 0  # 2022-8-23 Amazon modifications
 
-    print(f"Line filter for clang-tidy:\n{line_ranges}\n")
+    #   print(f"Line filter for clang-tidy:\n{line_ranges}\n") # 2022-11-7 Amazon changed
 
     clang_tidy_warnings = get_clang_tidy_warnings(
         line_ranges,
@@ -697,50 +792,58 @@ def main(
         config_file,
         '"' + '" "'.join(files) + '"',
     )
-    print("clang-tidy had the following warnings:\n", clang_tidy_warnings, flush=True)
+  #  print("clang-tidy had the following warnings:\n", clang_tidy_warnings, flush=True) # 2022-11-7 Amazon changed
 
     if clang_tidy_warnings == {}:
         print("No warnings, LGTM!")
-        if not dry_run:
-            pull_request.post_lgtm_comment(lgtm_comment_body)
-        return 0 # 2022-8-23 Amazon modifications
+ #       if not dry_run and has_pull_request:  # 2022-11-7 Amazon changed
+ #           pull_request.post_lgtm_comment(lgtm_comment_body)
+        return 0  # 2022-8-23 Amazon modifications
 
     diff_lookup = make_file_line_lookup(diff)
     offset_lookup = make_file_offset_lookup(files)
 
-# 2022-8-23 Amazon modifications
+    # 2022-8-23 Amazon modifications
     with message_group("Creating review from warnings"):
-        review = make_review(
+        [review, log_messages] = make_review(
             clang_tidy_warnings["Diagnostics"], diff_lookup, offset_lookup, build_dir,
-            clang_tidy_warnings[HAS_COMPILE_COMMANDS]
+            clang_tidy_warnings[HAS_COMPILE_COMMANDS], http_prefix
         )
 
-    print(
-        "Created the following review:\n", pprint.pformat(review, width=130), flush=True
-    )
+# 2022-11-7 Amazon changed
+ #   print(
+#        "Created the following review:\n", pprint.pformat(review, width=130), flush=True
+ #   )
 
     if review["comments"] == []:
         print("No warnings to report, LGTM!")
-        if not dry_run:
-            pull_request.post_lgtm_comment(lgtm_comment_body)
+#        if not dry_run and has_pull_request: # 2022-11-7 Amazon changed
+#            pull_request.post_lgtm_comment(lgtm_comment_body)
         return 0  # 2022-8-23 Amazon modifications
 
-    print(f"::set-output name=total_comments::{len(review['comments'])}")
+#    print(f"::set-output name=total_comments::{len(review['comments'])}") # 2022-11-7 Amazon changed
 
-    print("Removing already posted or extra comments", flush=True)
-    trimmed_review = cull_comments(pull_request, review, max_comments)
+ #   print("Removing already posted or extra comments", flush=True) # 2022-11-7 Amazon changed
+#    if has_pull_request:
+#        trimmed_review = cull_comments(pull_request, review, max_comments)
+    trimmed_review = review
 
     if trimmed_review["comments"] == []:
         print("Everything already posted!")
-        return 1 # 2022-8-23 Amazon modifications
+        return 1  # 2022-8-23 Amazon modifications
 
     if dry_run:
         pprint.pprint(review, width=130)
-        return 1 # 2022-8-23 Amazon modifications
+        return 1  # 2022-8-23 Amazon modifications
 
-    print("Posting the review:\n", pprint.pformat(trimmed_review), flush=True)
-    pull_request.post_review(trimmed_review)
-    return 1 # 2022-8-23 Amazon modifications
+ # 2022-11-7 Amazon changed
+#    print("Posting the review:\n", pprint.pformat(trimmed_review), flush=True)
+#    pull_request.post_review(trimmed_review) # 2022-11-7 Amazon changed
+
+    for log_message in log_messages:
+        print(log_message)
+
+    return 1  # 2022-8-23 Amazon modifications
 
 
 def strip_enclosing_quotes(string: str) -> str:
@@ -787,7 +890,7 @@ if __name__ == "__main__":
         description="Create a review from clang-tidy warnings"
     )
     parser.add_argument("--repo", help="Repo name in form 'owner/repo'")
-    parser.add_argument("--pr", help="PR number", type=int)
+    parser.add_argument("--pr", help="PR number")
     parser.add_argument(
         "--clang_tidy_binary", help="clang-tidy binary", default="clang-tidy-12"  # 2022-8-23 Amazon modifications
     )
@@ -847,6 +950,8 @@ if __name__ == "__main__":
         default='clang-tidy review says "All clean, LGTM! :+1:"',
     )
     parser.add_argument("--token", help="github auth token")
+    parser.add_argument("--head_ref", help="github head ref") # 2022-11-7 Amazon changed
+    parser.add_argument("--ref", help="github ref") # 2022-11-7 Amazon changed
     parser.add_argument(
         "--dry-run", help="Run and generate review, but don't post", action="store_true"
     )
@@ -879,7 +984,7 @@ if __name__ == "__main__":
 
     elif os.path.exists(build_compile_commands):
         fix_absolute_paths(build_compile_commands, args.base_dir)
-# 2022-8-23 Amazon modifications
+    # 2022-8-23 Amazon modifications
     result = main(
         repo=args.repo,
         pr_number=args.pr,
@@ -892,9 +997,10 @@ if __name__ == "__main__":
         exclude=exclude,
         max_comments=args.max_comments,
         lgtm_comment_body=strip_enclosing_quotes(args.lgtm_comment_body),
+        head_ref=args.head_ref,
+        ref=args.ref,
         dry_run=args.dry_run,
     )
-# 2022-8-23 Amazon modifications
-    if result == 1 :
+    # 2022-8-23 Amazon modifications
+    if result == 1:
         exit(1)
-

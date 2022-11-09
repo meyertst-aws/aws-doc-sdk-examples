@@ -15,7 +15,7 @@ inputs:
   base_dir:
     description: 'Absolute path to initial working directory. Useful if generating `compile_commands.json` outside of the Action'
     default: ${{ github.workspace }}
-    require: false
+    required: false
   clang_tidy_version:
     description: 'Version of clang-tidy to use; one of 6.0, 7, 8, 9, 10, 11, 12'
     default: '12'
@@ -53,9 +53,21 @@ inputs:
     required: false
     default: 'clang-tidy review says "All clean, LGTM! :+1:"'
   pr:
+    description: 'Pull request number'
     default: ${{ github.event.pull_request.number }}
+    required: false
   repo:
+    description: 'The github repository'
     default: ${{ github.repository }}
+  head_ref:
+    description: 'The github head reference'
+    default: ${{ github.head_ref }}
+  ref:
+    description: 'The github reference'
+    default: ${{ github.ref }}
+  server_url:
+    description: 'The server url'
+    default: ${{ github.server_url }}
 outputs:
   total_comments:
     description: 'Total number of warnings from clang-tidy'
@@ -76,3 +88,5 @@ runs:
     - --apt-packages=${{ inputs.apt_packages }}
     - --cmake-command='${{ inputs.cmake_command }}'
     - --lgtm-comment-body='${{ inputs.lgtm_comment_body }}'
+    - --head_ref='${{ inputs.head_ref }}'
+    - --ref='${{ inputs.ref }}'
