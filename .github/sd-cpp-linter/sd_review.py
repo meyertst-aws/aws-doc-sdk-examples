@@ -602,7 +602,7 @@ def get_clang_tidy_warnings(
     except subprocess.CalledProcessError as e:
         with message_group(f"Result:\n\t{command}"):
             print(
-                f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}\nOutput was:\n{e.stdout}"
+                f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}"
             )
 
     end = datetime.datetime.now()
@@ -661,7 +661,8 @@ def main(
         print("No files to check!")
         return 0
 
-    print(f"Checking these files: {files}", flush=True)
+    with message_group(f"Files to check."):
+        print(f"Checking these files: {files}", flush=True)
 
     line_ranges = get_line_ranges(diff, files)
     if line_ranges == "[]":
