@@ -600,10 +600,10 @@ def get_clang_tidy_warnings(
                 command, capture_output=True, shell=True, check=True, encoding="utf-8"
             )
     except subprocess.CalledProcessError as e:
-        print(
-            f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}\nOutput was:\n{e.stdout}"
-        )
-
+        with message_group(f"Result:\n\t{command}"):
+            print(
+                f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}\nOutput was:\n{e.stdout}"
+            )
 
     end = datetime.datetime.now()
 
