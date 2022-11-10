@@ -19,6 +19,6 @@ jobs:
       - name: "Run clang-tidy check"
         uses: ./.github/sd-cpp-linter
         with:
-          config_file: ./.github/cpp-linter/clang-tidy-config.txt
+          config_file: ./.github/sd-cpp-linter/clang-tidy-config.txt
           token: ${{ secrets.GITHUB_TOKEN }}
 
