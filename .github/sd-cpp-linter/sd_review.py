@@ -673,7 +673,7 @@ def main(
         config_file,
         '"' + '" "'.join(files) + '"',
     )
-
+    print(f"clang_tidy_warnings {clang_tidy_warnings}")
     if "Diagnostics" not in clang_tidy_warnings:
         print(lgtm_comment_body)
         return 0
