@@ -509,7 +509,7 @@ def make_comments(diagnostics, diff_lookup, offset_lookup, build_dir, has_compil
             continue
 
         if diagnostic["DiagnosticName"] in ignored_diagnostics:
-            print(f'ignoring diagnostic {diagnostic["DiagnosticName"]}')
+ #           print(f'ignoring diagnostic {diagnostic["DiagnosticName"]}')
             continue
 
         comment_body, end_line = make_comment_from_diagnostic(
@@ -677,7 +677,7 @@ def main(
         config_file,
         '"' + '" "'.join(files) + '"',
     )
-    print(f"clang_tidy_warnings {clang_tidy_warnings}")
+
     if "Diagnostics" not in clang_tidy_warnings:
         print(lgtm_comment_body)
         return 0
