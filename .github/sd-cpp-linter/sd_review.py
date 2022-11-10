@@ -599,8 +599,11 @@ def get_clang_tidy_warnings(
             subprocess.run(
                 command, capture_output=True, shell=True, check=True, encoding="utf-8"
             )
-    except subprocess.CalledProcessError:
-        pass
+    except subprocess.CalledProcessError as e:
+        print(
+            f"\n\nclang-tidy failed with return code {e.returncode} and error:\n{e.stderr}\nOutput was:\n{e.stdout}"
+        )
+
 
     end = datetime.datetime.now()
 
