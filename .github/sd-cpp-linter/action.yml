@@ -1,5 +1,5 @@
-name: 'clang-tidy review'
-description: 'Create a pull request review based on warnings from clang-tidy'
+name: 'sd clang-tidy review'
+description: 'Create an annotations review based on warnings from clang-tidy'
 branding:
   icon: 'book-open'
   color: 'red'
@@ -17,7 +17,7 @@ inputs:
     default: ${{ github.workspace }}
     required: false
   clang_tidy_version:
-    description: 'Version of clang-tidy to use; one of 6.0, 7, 8, 9, 10, 11, 12'
+    description: 'Version of clang-tidy to use; currently only 12 is supported'
     default: '12'
     required: false
   clang_tidy_checks:

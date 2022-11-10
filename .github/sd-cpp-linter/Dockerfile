@@ -10,6 +10,6 @@ RUN apt update && \
     pip3 install --upgrade pip && \
     pip3 install -r requirements.txt
 
-COPY review.py /review.py
+COPY sd_review.py /sd_review.py
 
-ENTRYPOINT ["/review.py"]
+ENTRYPOINT ["/sd_review.py"]

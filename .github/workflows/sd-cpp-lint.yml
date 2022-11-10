@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: "Run clang-tidy check"
-        uses: ./.github/cpp-linter
+        uses: ./.github/sd-cpp-linter
         with:
           config_file: ./.github/cpp-linter/clang-tidy-config.txt
           token: ${{ secrets.GITHUB_TOKEN }}
