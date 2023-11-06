@@ -8,8 +8,10 @@ from botocore.exceptions import ClientError
 
 log = logging.getLogger(__name__)
 
+
 class ParameterHelperError(Exception):
     pass
+
 
 # snippet-start:[python.example_code.workflow.ResilientService_ParameterHelper]
 class ParameterHelper:
@@ -18,17 +20,24 @@ class ParameterHelper:
     the demonstration of resilient architecture, such as failure of a dependency or
     how the service responds to a health check.
     """
-    table = 'doc-example-resilient-architecture-table'
-    failure_response = 'doc-example-resilient-architecture-failure-response'
-    health_check = 'doc-example-resilient-architecture-health-check'
 
-    def __init__(self, table_name):
+    table = "doc-example-resilient-architecture-table"
+    failure_response = "doc-example-resilient-architecture-failure-response"
+    health_check = "doc-example-resilient-architecture-health-check"
+
+    def __init__(self, table_name, ssm_client):
         """
         :param table_name: The name of the DynamoDB table that is used as a recommendation
                            service.
+        :param ssm_client: A Boto3 Systems Manager client.
         """
-        self.ssm_client = boto3.client('ssm')
+        self.ssm_client = ssm_client
         self.table_name = table_name
+
+    @classmethod
+    def from_client(cls, table_name):
+        ssm_client = boto3.client("ssm")
+        return cls(table_name, ssm_client)
 
     def reset(self):
         """
@@ -37,8 +46,8 @@ class ParameterHelper:
         dependency fails, and shallow health checks.
         """
         self.put(self.table, self.table_name)
-        self.put(self.failure_response, 'none')
-        self.put(self.health_check, 'shallow')
+        self.put(self.failure_response, "none")
+        self.put(self.health_check, "shallow")
 
     def put(self, name, value):
         """
@@ -48,9 +57,14 @@ class ParameterHelper:
         :param value: The new value of the parameter.
         """
         try:
-            self.ssm_client.put_parameter(Name=name, Value=value, Overwrite=True)
+            self.ssm_client.put_parameter(
+                Name=name, Value=value, Overwrite=True, Type="String"
+            )
             log.info("Setting demo parameter %s to '%s'.", name, value)
         except ClientError as err:
             raise ParameterHelperError(
-                f"Couldn't set parameter {name} to {value}: {err}")
+                f"Couldn't set parameter {name} to {value}: {err}"
+            )
+
+
 # snippet-end:[python.example_code.workflow.ResilientService_ParameterHelper]

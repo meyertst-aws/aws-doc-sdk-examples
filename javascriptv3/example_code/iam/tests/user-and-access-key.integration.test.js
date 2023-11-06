@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { StatusType } from "@aws-sdk/client-iam";
 
-import { getUniqueName } from "libs/utils/util-string.js";
+import { getUniqueName } from "@aws-sdk-examples/libs/utils/util-string.js";
 
 import { createUser } from "../actions/create-user.js";
 import { listUsers } from "../actions/list-users.js";
@@ -40,37 +40,37 @@ describe("User and access key test", () => {
     // List the access keys.
     let accessKeyMetadata = await findAccessKeyMetadata(
       newUserName,
-      createAccessKeyResponse.AccessKey.AccessKeyId
+      createAccessKeyResponse.AccessKey.AccessKeyId,
     );
     expect(accessKeyMetadata).toBeDefined();
 
     // Get the data on when the access key was last used.
     const getAccessKeyLastUsedResponse = await getAccessKeyLastUsed(
-      createAccessKeyResponse.AccessKey.AccessKeyId
+      createAccessKeyResponse.AccessKey.AccessKeyId,
     );
     expect(getAccessKeyLastUsedResponse.AccessKeyLastUsed).toBeDefined();
 
     // Update the access key.
     await updateAccessKey(
       newUserName,
-      createAccessKeyResponse.AccessKey.AccessKeyId
+      createAccessKeyResponse.AccessKey.AccessKeyId,
     );
     accessKeyMetadata = await findAccessKeyMetadata(
       newUserName,
-      createAccessKeyResponse.AccessKey.AccessKeyId
+      createAccessKeyResponse.AccessKey.AccessKeyId,
     );
     expect(accessKeyMetadata?.Status).toEqual(StatusType.Inactive);
 
     // Delete the access key.
     await deleteAccessKey(
       newUserName,
-      createAccessKeyResponse.AccessKey.AccessKeyId
+      createAccessKeyResponse.AccessKey.AccessKeyId,
     );
 
     // List the access keys.
     accessKeyMetadata = await findAccessKeyMetadata(
       newUserName,
-      createAccessKeyResponse.AccessKey.AccessKeyId
+      createAccessKeyResponse.AccessKey.AccessKeyId,
     );
     expect(accessKeyMetadata).toBeUndefined();
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,9 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<Content Include="..\..\..\workflows\sagemaker_pipelines\resources\GeoSpatialPipeline.json" Condition="Exists('..\..\..\workflows\sagemaker_pipelines\resources\GeoSpatialPipeline.json')" Link="GeoSpatialPipeline.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="settings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
@@ -18,7 +21,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="settings.local.json" />
+	  <None Include="..\..\..\workflows\sagemaker_pipelines\resources\latlongtest.csv" Condition="Exists('..\..\..\workflows\sagemaker_pipelines\resources\latlongtest.csv')" Link="latlongtest.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
   <ItemGroup>

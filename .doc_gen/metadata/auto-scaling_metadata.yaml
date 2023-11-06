@@ -22,10 +22,18 @@ auto-scaling_Hello:
             - description:
               snippet_tags:
                 - php.example_code.auto-scaling.basics.helloService
+    Python:
+      versions:
+        - sdk_version: 3
+          github: python/example_code/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - python.example_code.auto-scaling.Hello
     Rust:
       versions:
         - sdk_version: 1
-          github: rust_dev_preview/examples/autoscaling
+          github: rust_dev_preview/examples/auto-scaling
           excerpts:
             - description:
               snippet_tags:
@@ -93,7 +101,7 @@ auto-scaling_CreateAutoScalingGroup:
     Rust:
       versions:
         - sdk_version: 1
-          github: rust_dev_preview/examples/autoscaling
+          github: rust_dev_preview/examples/auto-scaling
           excerpts:
             - description:
               snippet_tags:
@@ -154,14 +162,14 @@ auto-scaling_DeleteAutoScalingGroup:
         - sdk_version: 3
           github: python/example_code/auto-scaling
           excerpts:
-            - description:
+            - description: Update the minimum size of an Auto Scaling group to zero, terminate all instances in the group, and delete the group.
               snippet_tags:
-                - python.example_code.auto-scaling.AutoScalingWrapper.decl
-                - python.example_code.auto-scaling.DeleteAutoScalingGroup
+                - python.cross_service.resilient_service.AutoScaler.decl
+                - python.cross_service.resilient_service.auto-scaling.DeleteAutoScalingGroup
     Rust:
       versions:
         - sdk_version: 1
-          github: rust_dev_preview/examples/autoscaling
+          github: rust_dev_preview/examples/auto-scaling
           excerpts:
             - description:
               snippet_tags:
@@ -228,7 +236,7 @@ auto-scaling_DescribeAutoScalingGroups:
     Rust:
       versions:
         - sdk_version: 1
-          github: rust_dev_preview/examples/autoscaling
+          github: rust_dev_preview/examples/auto-scaling
           excerpts:
             - description:
               snippet_tags:
@@ -295,7 +303,7 @@ auto-scaling_UpdateAutoScalingGroup:
     Rust:
       versions:
         - sdk_version: 1
-          github: rust_dev_preview/examples/autoscaling
+          github: rust_dev_preview/examples/auto-scaling
           excerpts:
             - description:
               snippet_tags:
@@ -373,6 +381,15 @@ auto-scaling_TerminateInstanceInAutoScalingGroup:
                 - cpp.example_code.autoscaling.autoscaling_client
                 - cpp.example_code.autoscaling.terminate_instance_autoscaling_group1
                 - cpp.example_code.autoscaling.terminate_instance_autoscaling_group2
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - rust.auto-scaling.scenario.terminate_some_instance
+                - rust.auto-scaling.scenario.get_group
   services:
     auto-scaling: {TerminateInstanceInAutoScalingGroup}
 auto-scaling_SetDesiredCapacity:
@@ -435,6 +452,14 @@ auto-scaling_SetDesiredCapacity:
                 - cpp.example_code.autoscaling.autoscaling_client
                 - cpp.example_code.autoscaling.set_desired_capacity1
                 - cpp.example_code.autoscaling.set_desired_capacity2
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - rust.auto-scaling.scenario.scale_desired_capacity
   services:
     auto-scaling: {SetDesiredCapacity}
 auto-scaling_DescribeAutoScalingInstances:
@@ -497,6 +522,14 @@ auto-scaling_DescribeAutoScalingInstances:
                 - cpp.example_code.autoscaling.autoscaling_client
                 - cpp.example_code.autoscaling.describe_autoscaling_instances1
                 - cpp.example_code.autoscaling.describe_autoscaling_instances2
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - rust.auto-scaling.scenario.list_instances
   services:
     auto-scaling: {DescribeAutoScalingInstances}
 auto-scaling_DescribeScalingActivities:
@@ -559,6 +592,14 @@ auto-scaling_DescribeScalingActivities:
                 - cpp.example_code.autoscaling.autoscaling_client
                 - cpp.example_code.autoscaling.describe_scaling_activities1
                 - cpp.example_code.autoscaling.describe_scaling_activities2
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - rust.auto-scaling.scenario.describe_scenario
   services:
     auto-scaling: {DescribeScalingActivities}
 auto-scaling_EnableMetricsCollection:
@@ -621,6 +662,14 @@ auto-scaling_EnableMetricsCollection:
                 - cpp.example_code.autoscaling.autoscaling_client
                 - cpp.example_code.autoscaling.enable_metrics_collection1
                 - cpp.example_code.autoscaling.enable_metrics_collection2
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - rust.auto-scaling.scenario.enable_metrics_collection
   services:
     auto-scaling: {EnableMetricsCollection}
 auto-scaling_DisableMetricsCollection:
@@ -683,8 +732,34 @@ auto-scaling_DisableMetricsCollection:
                 - cpp.example_code.autoscaling.autoscaling_client
                 - cpp.example_code.autoscaling.disable_metrics_collection1
                 - cpp.example_code.autoscaling.disable_metrics_collection2
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_tags:
+                - rust.auto-scaling.scenario.disable_metrics_collection
   services:
     auto-scaling: {DisableMetricsCollection}
+auto-scaling_AttachLoadBalancerTargetGroups:
+  title: Attach an ELB target group to an &AS; group using an &AWS; SDK
+  title_abbrev: Attach an ELB target group to an Auto Scaling group
+  synopsis: attach an ELB target group to an &AS; group.
+  category:
+  languages:
+    Python:
+      versions:
+        - sdk_version: 3
+          github: python/example_code/auto-scaling
+          sdkguide:
+          excerpts:
+            - description:
+              snippet_tags:
+                - python.cross_service.resilient_service.AutoScaler.decl
+                - python.cross_service.resilient_service.auto-scaling.AttachLoadBalancerTargetGroups
+  services:
+    auto-scaling: {AttachLoadBalancerTargetGroups}
 auto-scaling_Scenario_GroupsAndInstances:
   title: Manage &AS; groups and instances using an &AWS; SDK
   title_abbrev: Manage groups and instances
@@ -765,6 +840,17 @@ auto-scaling_Scenario_GroupsAndInstances:
             - description:
               snippet_tags:
                 - cpp.example_code.autoscaling.groups_and_instances_scenario
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rust_dev_preview/examples/auto-scaling
+          excerpts:
+            - description:
+              snippet_files:
+                - rust_dev_preview/examples/auto-scaling/Cargo.toml
+                - rust_dev_preview/examples/auto-scaling/src/bin/scenario.rs
+                - rust_dev_preview/examples/auto-scaling/src/lib.rs
+                - rust_dev_preview/examples/auto-scaling/src/scenario.rs
   services:
     auto-scaling:
       {

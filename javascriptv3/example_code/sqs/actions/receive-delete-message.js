@@ -23,8 +23,9 @@ const receiveMessage = (queueUrl) =>
       MaxNumberOfMessages: 10,
       MessageAttributeNames: ["All"],
       QueueUrl: queueUrl,
+      WaitTimeSeconds: 20,
       VisibilityTimeout: 20,
-    })
+    }),
   );
 
 export const main = async (queueUrl = SQS_QUEUE_URL) => {
@@ -40,7 +41,7 @@ export const main = async (queueUrl = SQS_QUEUE_URL) => {
       new DeleteMessageCommand({
         QueueUrl: queueUrl,
         ReceiptHandle: Messages[0].ReceiptHandle,
-      })
+      }),
     );
   } else {
     await client.send(
@@ -50,7 +51,7 @@ export const main = async (queueUrl = SQS_QUEUE_URL) => {
           Id: message.MessageId,
           ReceiptHandle: message.ReceiptHandle,
         })),
-      })
+      }),
     );
   }
 };

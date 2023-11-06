@@ -78,6 +78,9 @@
 - name: Rust
   color: "f5f7f9"
   description: "This issue relates to the AWS SDK for Rust (Preview)"
+- name: "SAP ABAP"
+  color: "f5f7f9"
+  description: "This issue relates to the AWS SDK for SAP ABAP"
 - name: Swift
   color: "f5f7f9"
   description: "This issue relates to the AWS SDK for Swift"
@@ -87,6 +90,9 @@
 - name: Shell
   color: "f5f7f9"
   description: "Tools written in bash/sh"
+- name: Tools
+  color: "f5f7f9"
+  description: "This issue relates to a custom tooling to streamline development tasks"
 
 - name: CLI
   description: "Relates to the AWS CLI"
@@ -96,9 +102,6 @@
   description: "Relates to the AWS Cloud Development Kit (CDK)"
 - name: CloudFormation
   description: "Relates to CloudFormation templates"
-  color: "f5f7f9"
-- name: Testing
-  description: "Relates to integration testing"
   color: "f5f7f9"
 - name: GitHub settings
   color: "f5f7f9"

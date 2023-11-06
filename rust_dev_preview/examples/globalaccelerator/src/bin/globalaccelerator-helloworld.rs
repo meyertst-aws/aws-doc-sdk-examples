@@ -8,7 +8,6 @@
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_globalaccelerator::{config::Region, meta::PKG_VERSION, Client, Error};
 use clap::Parser;
-use tokio_stream::StreamExt;
 
 #[derive(Debug, Parser)]
 struct Opt {
@@ -22,17 +21,21 @@ struct Opt {
 async fn show_accelerators(client: &Client) -> Result<(), Error> {
     println!("Welcome to the AWS Rust SDK Global Accelerator example!");
     println!();
-    let mut paginator = client.list_accelerators().into_paginator().send();
+    let accelerators = client
+        .list_accelerators()
+        .into_paginator()
+        .items()
+        .send()
+        .try_collect()
+        .await?;
 
-    while let Some(page) = paginator.try_next().await? {
-        for accelerator in page.accelerators().unwrap_or_default().iter() {
-            let accelerator_arn = accelerator.name().unwrap_or_default();
-            let accelerator_name = accelerator.accelerator_arn().unwrap_or_default();
+    for accelerator in accelerators {
+        let accelerator_arn = accelerator.name().unwrap_or_default();
+        let accelerator_name = accelerator.accelerator_arn().unwrap_or_default();
 
-            println!("Accelerator Name : {}", accelerator_name);
-            println!("Accelerator ARN : {}", accelerator_arn);
-            println!();
-        }
+        println!("Accelerator Name : {}", accelerator_name);
+        println!("Accelerator ARN : {}", accelerator_arn);
+        println!();
     }
 
     Ok(())

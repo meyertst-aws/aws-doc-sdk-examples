@@ -31,6 +31,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.ssm_client = ssm_client
         super().__init__(*args, **kwargs)
 
+    def _respond(self, status_code, payload):
+        self.send_response(status_code)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(bytes(json.dumps(payload), "utf-8"))
+
     def do_GET(self):
         """
         Responds to an HTTP GET request. This function uses Systems Manager parameters
@@ -81,15 +87,13 @@ class RequestHandler(BaseHTTPRequestHandler):
             payload['Metadata'] = {
                 'InstanceId': ec2_metadata.instance_id,
                 'AvailabilityZone': ec2_metadata.availability_zone}
-
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(bytes(json.dumps(payload), "utf-8"))
+            self._respond(200, payload)
         elif self.path == '/healthcheck':
             response_code = 200
             success = True
-            if parameters[health_check] == 'deep':
+            if not health_check in parameters:
+                print(f"{health_check} parameter not found.")
+            elif parameters[health_check] == 'deep':
                 try:
                     response = self.dynamodb_client.describe_table(TableName=parameters[table])
                     if response['Table']['TableStatus'] == 'ACTIVE':
@@ -102,11 +106,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     print(f"Recommendation service health check error: {err}")
                     response_code = 503
                     success = False
-
-            self.send_response(response_code)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(bytes(json.dumps({'success': success}), "utf-8"))
+            self._respond(response_code, {'success': success})
 
 
 def run():
@@ -117,7 +117,7 @@ def run():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('port', default=80, type=int, help="The port where the HTTP server listens.")
-    parser.add_argument('region', default='us-west-2', help="The AWS Region of AWS resources used by this example.")
+    parser.add_argument('--region', default=ec2_metadata.region, help="The AWS Region of AWS resources used by this example.")
     args = parser.parse_args()
 
     server_port = args.port

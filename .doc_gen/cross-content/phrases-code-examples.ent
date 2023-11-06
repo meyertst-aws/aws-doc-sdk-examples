@@ -63,11 +63,19 @@
 <!ENTITY PERSRlong '&PERSlong; Runtime'>
 <!ENTITY PERSR '&PERS; Runtime'>
 
-<!-- Serverless Snippets -->
-<!ENTITY Serverless 'Serverless Snippets'>
+<!-- Serverless examples -->
+<!ENTITY Serverless 'Serverless examples'>
 <!-- Transcribe Medical -->
 <!ENTITY TSCMlong '&TSClong; Medical'>
 <!ENTITY TSCM '&TSC; Medical'>
 
 <!--Elastic Load Balancing-->
 <!ENTITY ELBacro 'ELB'>
+
+<!--Bedrock-->
+<!ENTITY BRlong 'Amazon Bedrock'>
+<!ENTITY BR 'Amazon Bedrock'>
+
+<!--Bedrock Runtime-->
+<!ENTITY BRRUNlong '&BRlong; Runtime'>
+<!ENTITY BRRUN '&BR; Runtime'>

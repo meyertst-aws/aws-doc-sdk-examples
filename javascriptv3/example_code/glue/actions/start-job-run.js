@@ -4,7 +4,7 @@
  */
 
 import { GlueClient, StartJobRunCommand } from "@aws-sdk/client-glue";
-import { DEFAULT_REGION } from "../../libs/utils/util-aws-sdk.js";
+import { DEFAULT_REGION } from "@aws-sdk-examples/libs/utils/util-aws-sdk.js";
 
 /** snippet-start:[javascript.v3.glue.actions.StartJobRun] */
 const startJobRun = (jobName, dbName, tableName, bucketName) => {
@@ -15,8 +15,8 @@ const startJobRun = (jobName, dbName, tableName, bucketName) => {
     Arguments: {
       "--input_database": dbName,
       "--input_table": tableName,
-      "--output_bucket_url": `s3://${bucketName}/`
-    }
+      "--output_bucket_url": `s3://${bucketName}/`,
+    },
   });
 
   return client.send(command);

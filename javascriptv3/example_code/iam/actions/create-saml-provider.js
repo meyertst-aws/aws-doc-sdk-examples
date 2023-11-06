@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import { CreateSAMLProviderCommand, IAMClient } from "@aws-sdk/client-iam";
 import { readFileSync } from "fs";
 import * as path from "path";
-import { dirnameFromMetaUrl } from "libs/utils/util-fs.js";
+import { dirnameFromMetaUrl } from "@aws-sdk-examples/libs/utils/util-fs.js";
 
 const client = new IAMClient({});
 
@@ -20,8 +20,8 @@ const client = new IAMClient({});
 const sampleMetadataDocument = readFileSync(
   path.join(
     dirnameFromMetaUrl(import.meta.url),
-    "../../../../resources/sample_files/sample_saml_metadata.xml"
-  )
+    "../../../../resources/sample_files/sample_saml_metadata.xml",
+  ),
 );
 
 /**

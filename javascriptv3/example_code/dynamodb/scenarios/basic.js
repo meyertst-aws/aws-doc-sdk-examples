@@ -31,12 +31,12 @@ import {
   paginateScan,
 } from "@aws-sdk/lib-dynamodb";
 
-// These modules are local to our GitHub repository. We recommend cloning 
+// These modules are local to our GitHub repository. We recommend cloning
 // the project from GitHub if you want to run this example.
 // For more information, see https://github.com/awsdocs/aws-doc-sdk-examples.
-import { getUniqueName } from "libs/utils/util-string.js";
-import { dirnameFromMetaUrl } from "libs/utils/util-fs.js";
-import { chunkArray } from "libs/utils/util-array.js";
+import { getUniqueName } from "@aws-sdk-examples/libs/utils/util-string.js";
+import { dirnameFromMetaUrl } from "@aws-sdk-examples/libs/utils/util-fs.js";
+import { chunkArray } from "@aws-sdk-examples/libs/utils/util-array.js";
 
 const dirname = dirnameFromMetaUrl(import.meta.url);
 const tableName = getUniqueName("Movies");
@@ -173,7 +173,7 @@ export const main = async () => {
 
   log("Adding movies from local JSON file.");
   const file = readFileSync(
-    `${dirname}../../../../resources/sample_files/movies.json`
+    `${dirname}../../../../resources/sample_files/movies.json`,
   );
   const movies = JSON.parse(file.toString());
   // chunkArray is a local convenience function. It takes an array and returns
@@ -214,7 +214,7 @@ export const main = async () => {
       ExpressionAttributeNames: { "#y": "year" },
       ExpressionAttributeValues: { ":y": 1981 },
       ConsistentRead: true,
-    }
+    },
   );
   /**
    * @type { Record<string, any>[] };
@@ -243,7 +243,7 @@ export const main = async () => {
       ExpressionAttributeNames: { "#y": "year" },
       ExpressionAttributeValues: { ":y1": 1980, ":y2": 1990 },
       ConsistentRead: true,
-    }
+    },
   );
   /**
    * @type { Record<string, any>[] };
@@ -255,7 +255,7 @@ export const main = async () => {
   log(
     `Movies: ${movies1980to1990
       .map((m) => `${m.title} (${m.year})`)
-      .join(", ")}`
+      .join(", ")}`,
   );
 
   /**

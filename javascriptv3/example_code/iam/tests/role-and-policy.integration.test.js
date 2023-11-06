@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { getUniqueName } from "libs/utils/util-string.js";
+import { getUniqueName } from "@aws-sdk-examples/libs/utils/util-string.js";
 
 import { createRole } from "../actions/create-role.js";
 import { getRole } from "../actions/get-role.js";
@@ -56,7 +56,7 @@ describe("Role and policy test", () => {
 
     await waitUntilRoleExists(
       { client: new IAMClient({}), maxWaitTime: 300 },
-      { RoleName: roleName }
+      { RoleName: roleName },
     );
 
     // List roles.
@@ -85,7 +85,7 @@ describe("Role and policy test", () => {
     await putRolePolicy(roleName, inlinePolicyName, examplePolicy);
     let foundInlinePolicyName = await findInlineRolePolicy(
       roleName,
-      inlinePolicyName
+      inlinePolicyName,
     );
     expect(foundInlinePolicyName).toEqual(inlinePolicyName);
 
@@ -93,7 +93,7 @@ describe("Role and policy test", () => {
     await deleteRolePolicy(roleName, inlinePolicyName);
     foundInlinePolicyName = await findInlineRolePolicy(
       roleName,
-      inlinePolicyName
+      inlinePolicyName,
     );
     expect(foundInlinePolicyName).toBeUndefined();
 
@@ -118,7 +118,7 @@ describe("Role and policy test", () => {
     // Delete role.
     await deleteRole(roleName);
     await expect(() => getRole(roleName)).rejects.toThrow(
-      `The role with name ${roleName} cannot be found.`
+      `The role with name ${roleName} cannot be found.`,
     );
   });
 });

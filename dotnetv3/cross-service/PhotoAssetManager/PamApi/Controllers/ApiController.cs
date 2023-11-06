@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier:  Apache-2.0
 
-using Amazon.Lambda.Core;
+using AWS.Lambda.Powertools.Logging;
 using Microsoft.AspNetCore.Mvc;
 using PamServices;
 
@@ -51,7 +51,7 @@ public class ApiController : ControllerBase
     [HttpGet("labels")]
     public async Task<IActionResult> Get()
     {
-        LambdaLogger.Log($"Test logging: getting labels.");
+        Logger.LogInformation($"Getting labels.");
         var allLabels = await _labelService.GetAllItems();
         var response = new LabelsResponse(allLabels.ToList());
         return Ok(response);

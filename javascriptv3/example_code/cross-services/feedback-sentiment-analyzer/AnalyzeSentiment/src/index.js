@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// snippet-start:[javascript.v3.sample.fsa.analyze_sentiment]
 import {
   ComprehendClient,
   DetectDominantLanguageCommand,
@@ -23,8 +24,8 @@ export const handler = async (extractTextOutput) => {
 
   // The source language is required for sentiment analysis and
   // translation in the next step.
-  const {Languages} = await comprehendClient.send(
-    detectDominantLanguageCommand
+  const { Languages } = await comprehendClient.send(
+    detectDominantLanguageCommand,
   );
 
   const languageCode = Languages[0].LanguageCode;
@@ -34,10 +35,11 @@ export const handler = async (extractTextOutput) => {
     LanguageCode: languageCode,
   });
 
-  const {Sentiment} = await comprehendClient.send(detectSentimentCommand);
+  const { Sentiment } = await comprehendClient.send(detectSentimentCommand);
 
   return {
     sentiment: Sentiment,
     language_code: languageCode,
   };
 };
+// snippet-end:[javascript.v3.sample.fsa.analyze_sentiment]

@@ -7,8 +7,8 @@ import { DescribeSubscriptionFiltersCommand } from "@aws-sdk/client-cloudwatch-l
 import { LambdaClient, waitUntilFunctionUpdated } from "@aws-sdk/client-lambda";
 import { describe, it, beforeAll, afterAll, expect } from "vitest";
 
-import { retry } from "libs/utils/util-timers.js";
-import { setEnv } from "libs/utils/util-node.js";
+import { retry } from "@aws-sdk-examples/libs/utils/util-timers.js";
+import { setEnv } from "@aws-sdk-examples/libs/utils/util-node.js";
 
 import {
   addPermissionLogsInvokeFunction,
@@ -32,7 +32,7 @@ const initializeLambdaFunction = async ({ funcName, roleName }) => {
 
   const { FunctionArn } = await retry(
     { intervalInMs: 2000, maxRetries: 20 },
-    () => createFunction(funcName, roleArn)
+    () => createFunction(funcName, roleArn),
   );
   setEnv("CLOUDWATCH_LOGS_DESTINATION_ARN", FunctionArn);
   return { functionArn: FunctionArn };
@@ -102,7 +102,7 @@ describe("put-subscription-filter", () => {
       await addPermissionLogsInvokeFunction(lambdaFuncName, logGroupName);
       await waitUntilFunctionUpdated(
         { client: new LambdaClient({ region: DEFAULT_REGION }) },
-        { FunctionName: lambdaFuncName }
+        { FunctionName: lambdaFuncName },
       );
     } catch (err) {
       console.error(err);
@@ -126,6 +126,6 @@ describe("put-subscription-filter", () => {
       await testCreateFilter(subscriptionFilterName, subscriptionFilterPattern);
       await testDeleteFilter();
     },
-    testTimeout
+    testTimeout,
   );
 });

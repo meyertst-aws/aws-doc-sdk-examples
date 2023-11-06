@@ -7,8 +7,8 @@ import {
   RunInstancesCommand,
   TerminateInstancesCommand,
 } from "@aws-sdk/client-ec2";
-import { retry } from "libs/utils/util-timers.js";
-import { DEFAULT_REGION } from "libs/utils/util-aws-sdk.js";
+import { retry } from "@aws-sdk-examples/libs/utils/util-timers.js";
+import { DEFAULT_REGION } from "@aws-sdk-examples/libs/utils/util-aws-sdk.js";
 
 const client = new EC2Client({ region: DEFAULT_REGION });
 
@@ -22,7 +22,7 @@ export const runEC2Instance = async () => {
     InstanceType: "t2.micro",
   });
   const { Instances } = await retry({ intervalInMs: 3000, maxRetries: 5 }, () =>
-    client.send(command)
+    client.send(command),
   );
   return Instances[0].InstanceId;
 };

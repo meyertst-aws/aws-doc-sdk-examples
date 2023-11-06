@@ -8,7 +8,7 @@ import {
   waitUntilFunctionExists,
   waitUntilFunctionUpdated,
 } from "@aws-sdk/client-lambda";
-import { createClientForDefaultRegion } from "../../libs/utils/util-aws-sdk";
+import { createClientForDefaultRegion } from "@aws-sdk-examples/libs/utils/util-aws-sdk";
 
 const MAX_WAIT_TIME = 60;
 
@@ -18,7 +18,7 @@ const waitForFunction = (getFunctionCommandInput) =>
       client: createClientForDefaultRegion(LambdaClient),
       maxWaitTime: MAX_WAIT_TIME,
     },
-    getFunctionCommandInput
+    getFunctionCommandInput,
   );
 
 const waitForFunctionActive = (getFunctionConfigurationCommandInput) =>
@@ -27,7 +27,7 @@ const waitForFunctionActive = (getFunctionConfigurationCommandInput) =>
       client: createClientForDefaultRegion(LambdaClient),
       maxWaitTime: MAX_WAIT_TIME,
     },
-    getFunctionConfigurationCommandInput
+    getFunctionConfigurationCommandInput,
   );
 
 const waitForFunctionUpdated = (getFunctionCommandInput) =>
@@ -36,7 +36,7 @@ const waitForFunctionUpdated = (getFunctionCommandInput) =>
       client: createClientForDefaultRegion(LambdaClient),
       maxWaitTime: MAX_WAIT_TIME,
     },
-    getFunctionCommandInput
+    getFunctionCommandInput,
   );
 
 export { waitForFunction, waitForFunctionActive, waitForFunctionUpdated };

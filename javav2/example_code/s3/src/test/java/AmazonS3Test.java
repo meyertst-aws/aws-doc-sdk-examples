@@ -3,20 +3,49 @@
    SPDX-License-Identifier: Apache-2.0
 */
 
-import com.google.gson.Gson;
-import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import com.example.s3.CopyObject;
+import com.example.s3.CopyObjectStorage;
+import com.example.s3.CreateAccessPoint;
+import com.example.s3.CreateBucket;
+import com.example.s3.DeleteBucketPolicy;
+import com.example.s3.DeleteMultiObjects;
+import com.example.s3.DeleteObjects;
+import com.example.s3.GetObjectData;
+import com.example.s3.GetObjectPresignedUrl;
+import com.example.s3.GetObjectRestoreStatus;
+import com.example.s3.LifecycleConfiguration;
+import com.example.s3.ListObjects;
+import com.example.s3.PutObject;
+import com.example.s3.RestoreObject;
+import com.example.s3.S3Cors;
+import com.example.s3.S3Scenario;
+import com.example.s3.S3ZipExample;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import java.io.*;
-import com.example.s3.*;
+
+import java.io.IOException;
+
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3control.S3ControlClient;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
+
 
 /**
  * To run these integration tests, you must set the required values
@@ -90,7 +119,7 @@ public class AmazonS3Test {
         objectPath= values.getObjectPath();
         toBucket = values.getToBucket();
         policyText = values.getPolicyText();
-        id  = values.getId();
+        id = values.getId();
         presignKey = values.getPresignKey();
         presignBucket= values.getPresignBucket();
         path = values.getPath();
@@ -104,7 +133,7 @@ public class AmazonS3Test {
         restoreImagePath = values.getRestoreImagePath();
         restoreBucket = values.getRestoreBucket();
         restoreImageName = values.getRestoreImageName();
-        bucketNameSc = values.getBucketNameSc()+ java.util.UUID.randomUUID();;
+        bucketNameSc = values.getBucketNameSc()+ java.util.UUID.randomUUID();
         keySc = values.getKeySc();
         objectPathSc = values.getObjectPathSc();
         savePathSc = values.getSavePathSc();
@@ -190,17 +219,10 @@ public class AmazonS3Test {
         System.out.println("Test 6 passed");
     }
 
-    @Test
-    @Tag("IntegrationTest")
-    @Order(7)
-    public void generatePresignedUrlAndUploadObject() {
-        assertDoesNotThrow(() ->GeneratePresignedUrlAndUploadObject.signBucket(presigner, presignBucket, presignKey));
-        System.out.println("Test 7 passed");
-    }
 
     @Test
     @Tag("IntegrationTest")
-    @Order(8)
+    @Order(7)
     public void getObjectPresignedUrl() {
         assertDoesNotThrow(() ->GetObjectPresignedUrl.getPresignedUrl(presigner, presignBucket, presignKey));
         System.out.println("Test 8 passed");
@@ -208,7 +230,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(9)
+    @Order(8)
     public void getObjectData() {
         assertDoesNotThrow(() ->GetObjectData.getObjectBytes(s3,bucketName,objectKey, path));
         System.out.println("Test 9 passed");
@@ -216,7 +238,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(10)
+    @Order(9)
     public void listObjects() {
         assertDoesNotThrow(() ->ListObjects.listBucketObjects(s3,bucketName));
         System.out.println("Test 10 passed");
@@ -224,7 +246,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(11)
+    @Order(10)
     public void createAccessPoint() {
         assertDoesNotThrow(() ->CreateAccessPoint.createSpecificAccessPoint(s3ControlClient, accountId, bucketName, accessPointName));
         assertDoesNotThrow(() ->CreateAccessPoint.deleteSpecificAccessPoint(s3ControlClient, accountId, accessPointName));
@@ -233,8 +255,8 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(12)
-    public void  lifecycleConfiguration() {
+    @Order(11)
+    public void lifecycleConfiguration() {
         assertDoesNotThrow(() ->LifecycleConfiguration.setLifecycleConfig(s3, bucketName, accountId));
         assertDoesNotThrow(() ->LifecycleConfiguration.getLifecycleConfig(s3, bucketName, accountId));
         assertDoesNotThrow(() ->LifecycleConfiguration.deleteLifecycleConfig(s3, bucketName, accountId));
@@ -243,8 +265,8 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(13)
-    public void S3Cors() {
+    @Order(12)
+    public void s3Cors() {
         assertDoesNotThrow(() ->S3Cors.setCorsInformation(s3, bucketName, accountId));
         assertDoesNotThrow(() ->S3Cors.getBucketCorsInformation(s3, bucketName, accountId));
         assertDoesNotThrow(() ->S3Cors.deleteBucketCorsInformation(s3, bucketName, accountId));
@@ -253,7 +275,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(14)
+    @Order(13)
     public void deleteMultiObjects() {
         assertDoesNotThrow(() ->DeleteMultiObjects.deleteBucketObjects(s3, bucketName));
         System.out.println("Test 14 passed");
@@ -261,7 +283,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(15)
+    @Order(14)
     public void deleteObjects() {
         assertDoesNotThrow(() ->DeleteObjects.deleteBucketObjects(s3,bucketName,objectKey));
         assertDoesNotThrow(() ->DeleteObjects.deleteBucketObjects(s3,bucketName,encryptObjectName));
@@ -270,7 +292,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(16)
+    @Order(15)
     public void copyObjectStorage() {
         assertDoesNotThrow(() ->PutObject.putS3Object(s3, restoreBucket, restoreImageName, restoreImagePath));
         assertDoesNotThrow(() ->CopyObjectStorage.copyBucketObject(s3,restoreBucket, restoreImageName, restoreBucket));
@@ -279,7 +301,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(17)
+    @Order(16)
     public void restoreObject() {
         assertDoesNotThrow(() ->RestoreObject.restoreS3Object(s3, restoreBucket, restoreImageName, accountId));
         System.out.println("Test 17 passed");
@@ -287,7 +309,7 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(18)
+    @Order(17)
     public void getRestoreStatus() {
         assertDoesNotThrow(() ->GetObjectRestoreStatus.checkStatus(s3, restoreBucket, restoreImageName));
         System.out.println("Test 18 passed");
@@ -295,8 +317,8 @@ public class AmazonS3Test {
 
     @Test
     @Tag("IntegrationTest")
-    @Order(19)
-    public void S3ZipExample() {
+    @Order(18)
+    public void s3ZipExample() {
         assertDoesNotThrow(() ->S3ZipExample.createZIPFile(s3, bucketNameZip, imageKeys));
         System.out.println("Test 19 passed");
     }
@@ -304,7 +326,7 @@ public class AmazonS3Test {
     @Test
     @Tag("IntegrationTest")
     @Order(19)
-    public void DeleteBucket() {
+    public void deleteBucket() {
         assertDoesNotThrow(() ->S3Scenario.deleteBucket(s3, bucketName));
         System.out.println("Test 19 passed");
     }

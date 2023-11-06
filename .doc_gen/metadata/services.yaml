@@ -120,6 +120,38 @@ batch:
   tags:
     product_categories: {'Compute'}
   version: batch-2016-08-10
+bedrock:
+  bundle: bedrock
+  long: '&BRlong;'
+  short: '&BR;'
+  sort: bedrock
+  expanded:
+    long: Amazon Bedrock
+    short: Amazon Bedrock
+  blurb: enables you to build and scale generative AI applications with foundation models.
+  guide:
+    subtitle: User Guide
+    url: bedrock/latest/userguide/what-is-bedrock.html
+  api_ref: bedrock/latest/APIReference/welcome.html
+  tags:
+    product_categories: {'Machine Learning &amp; AI'}
+  version: bedrock-2023-04-20
+bedrock-runtime:
+  bundle: bedrock
+  long: '&BRRUNlong;'
+  short: '&BRRUN;'
+  sort: Bedrock Runtime
+  expanded:
+    long: Amazon Bedrock Runtime
+    short: Amazon Bedrock Runtime
+  blurb: is a fully managed service that makes it easy to use foundation models from third-party providers and Amazon.
+  guide:
+    subtitle: User Guide
+    url: bedrock/latest/userguide/what-is-bedrock.html
+  api_ref: bedrock/latest/APIReference/welcome.html
+  tags:
+    product_categories: {'Machine Learning &amp; AI'}
+  version: bedrock-runtime-2023-09-30
 cloudformation:
   long: '&CFNlong;'
   short: '&CFN;'
@@ -713,7 +745,7 @@ medical-imaging:
     url: healthimaging/latest/devguide/what-is.html
   api_ref: healthimaging/latest/APIReference/Welcome.html
   tags:
-    product_categories: {'Machine Learning'}
+    product_categories: {'Machine Learning &amp; AI'}
   version: medical-imaging-2023-07-19
 migration-hub:
   long: '&MHBlong;'
@@ -728,7 +760,7 @@ migration-hub:
     url: migrationhub/latest/ug/getting-started.html
   api_ref: migrationhub/latest/ug/api-reference.html
   tags:
-    product_categories: {'Migration Hub Services'}
+    product_categories: {'Migration'}
   version: migration-hub-2017-05-31
 opensearch: 
   long: '&ESlong;'

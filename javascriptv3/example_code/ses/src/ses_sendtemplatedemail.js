@@ -14,7 +14,10 @@ node ses_sendtemplatedemail.js
  */
 // snippet-start:[ses.JavaScript.email.sendTemplatedEmailV3]
 import { SendTemplatedEmailCommand } from "@aws-sdk/client-ses";
-import { getUniqueName, postfix } from "../../libs/utils/util-string.js";
+import {
+  getUniqueName,
+  postfix,
+} from "@aws-sdk-examples/libs/utils/util-string.js";
 import { sesClient } from "./libs/sesClient.js";
 
 /**
@@ -52,7 +55,7 @@ const createReminderEmailCommand = (user, templateName) => {
 const run = async () => {
   const sendReminderEmailCommand = createReminderEmailCommand(
     USER,
-    TEMPLATE_NAME
+    TEMPLATE_NAME,
   );
   try {
     return await sesClient.send(sendReminderEmailCommand);

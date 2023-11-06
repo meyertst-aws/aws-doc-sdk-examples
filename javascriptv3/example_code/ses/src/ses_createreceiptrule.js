@@ -16,7 +16,7 @@ node ses_createreceiptrule.js
 // snippet-start:[ses.JavaScript.rules.createReceiptRuleV3]
 import { CreateReceiptRuleCommand, TlsPolicy } from "@aws-sdk/client-ses";
 import { sesClient } from "./libs/sesClient.js";
-import { getUniqueName } from "../../libs/utils/util-string.js";
+import { getUniqueName } from "@aws-sdk-examples/libs/utils/util-string.js";
 
 const RULE_SET_NAME = getUniqueName("RuleSetName");
 const RULE_NAME = getUniqueName("RuleName");
@@ -60,7 +60,7 @@ const run = async () => {
     return await sesClient.send(s3ReceiptRuleCommand);
   } catch (err) {
     console.log("Failed to create S3 receipt rule.", err);
-    return err;
+    throw err;
   }
 };
 // snippet-end:[ses.JavaScript.rules.createReceiptRuleV3]

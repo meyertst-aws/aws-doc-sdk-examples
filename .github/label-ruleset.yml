@@ -24,6 +24,8 @@ Ruby:
   - ruby/**/*
 Rust:
   - rust_dev_preview/**/*
+SAP ABAP:
+  - sap-abap/**/*
 Swift:
   - swift/**/*
 Typescript:
@@ -34,7 +36,7 @@ CDK:
   - resources/cdk/**/*
 CloudFormation:
   - cloudformation/**/*
-Testing:
-  - test/**/*
+Tools:
+  - .tools/**/*
 GitHub settings:
   - .github/**/*
