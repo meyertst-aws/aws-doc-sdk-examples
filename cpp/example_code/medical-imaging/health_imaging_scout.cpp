@@ -13,3 +13,8 @@
  * https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html.
  *
  **/
+
+#include <aws/core/Aws.h>
+#include <aws/cloudformation/CloudFormationClient.h>
+
+bool CreateS3BucketAndRole(Aws::Iam::IamClient &iamClient, Aws::String bucketName, Aws::String roleName)

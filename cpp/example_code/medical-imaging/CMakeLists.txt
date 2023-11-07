@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.8)
 
 set(SERVICE_NAME medical-imaging)
-set(SERVICE_COMPONENTS medical-imaging)
+set(SERVICE_COMPONENTS medical-imaging cloudformation)
 
 # Set this project's name.
 project("${SERVICE_NAME}-examples")

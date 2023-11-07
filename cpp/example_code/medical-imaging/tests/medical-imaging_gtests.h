@@ -17,7 +17,7 @@ namespace AwsDocTest {
         int underflow() override;
     };
 
-    class S3_GTests : public testing::Test {
+    class MedicalImaging_GTests : public testing::Test {
     protected:
 
         void SetUp() override;
@@ -47,7 +47,7 @@ namespace AwsDocTest {
 
         MyStringBuffer m_cinBuffer;
         std::streambuf *m_savedInBuffer = nullptr;
-    }; // S3_GTests
+    }; // MedicalImaging_GTests
 } // AwsDocTest
 
 #endif //S3_EXAMPLES_S3_GTESTS_H
