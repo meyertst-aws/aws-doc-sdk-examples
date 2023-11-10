@@ -67,6 +67,11 @@ foreach(file ${AWSDOC_SOURCE})
             ${AWSSDK_PLATFORM_DEPS}
             openjph) # TODO: remove this
 
+
+    target_compile_definitions(${EXAMPLE_EXE}
+            PRIVATE
+            TEMPLATES_PATH="${CMAKE_CURRENT_SOURCE_DIR}"
+            )
 endforeach()
 
 
