@@ -8,7 +8,14 @@
       "Description": "The policy name for the role.",
       "Type": "String"
     },
-
+    "DatastoreArn": {
+      "Description": "The ARN for the data store.",
+      "Type": "String"
+    },
+    "UserID": {
+      "Description": "The user's ID.",
+      "Type": "String"
+    }
   },
   "Resources": {
     "bucket": {
@@ -19,7 +26,37 @@
         }
       }
     },
-    "policy": {
+    "RootRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "medical-imaging.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "ForAllValues:StringEquals": {
+                  "aws:SourceAccount": {
+                    "Ref": "UserID"
+                  }
+                },
+                "ForAllValues:ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "DatastoreArn"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "Path": "/"
+      }
+    },
+    "RolePolicies": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyName": {
@@ -34,8 +71,18 @@
                 "s3:ListBucket"
               ],
               "Resource": [
-                {"Fn::Join" : ["", ["arn:aws:s3:::", {"Ref":"BucketName"}] ]}
-               ]
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "BucketName"
+                      }
+                    ]
+                  ]
+                }
+              ]
             },
             {
               "Effect": "Allow",
@@ -43,7 +90,18 @@
                 "s3:GetObject"
               ],
               "Resource": [
-                {"Fn::Join" : ["", ["arn:aws:s3:::", {"Ref":"BucketName"}, "/*"] ]}
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "BucketName"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
               ]
             },
             {
@@ -52,85 +110,42 @@
                 "s3:PutObject"
               ],
               "Resource": [
-                {"Fn::Join" : ["", ["arn:aws:s3:::", {"Ref":"BucketName"}, "/*"] ]}
-              ]
-            }
-          ],
-          "Roles" : [ { "Ref": "RoleName"}]
-        }
-      }
-    },
-    "role": {
-      "AWSTemplateFormatVersion": "2010-09-09",
-      "Resources": {
-        "RootRole": {
-          "Type": "AWS::IAM::Role",
-          "Properties": {
-            "AssumeRolePolicyDocument": {
-              "Version" : "2012-10-17",
-              "Statement": [ {
-                "Effect": "Allow",
-                "Principal": {
-                  "Service": [ "ec2.amazonaws.com" ]
-                },
-                "Action": [ "sts:AssumeRole" ]
-              } ]
-            },
-            "Path": "/"
-          }
-        },
-        "RolePolicies": {
-          "Type": "AWS::IAM::Policy",
-          "Properties": {
-            "PolicyName": {
-              "Ref": "PolicyName"
-            },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
                 {
-                  "Effect": "Allow",
-                  "Action": [
-                    "s3:ListBucket"
-                  ],
-                  "Resource": [
-                    {"Fn::Join" : ["", ["arn:aws:s3:::", {"Ref":"BucketName"}] ]}
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "s3:GetObject"
-                  ],
-                  "Resource": [
-                    {"Fn::Join" : ["", ["arn:aws:s3:::", {"Ref":"BucketName"}, "/*"] ]}
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "s3:PutObject"
-                  ],
-                  "Resource": [
-                    {"Fn::Join" : ["", ["arn:aws:s3:::", {"Ref":"BucketName"}, "/*"] ]}
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "BucketName"
+                      },
+                      "/*"
+                    ]
                   ]
                 }
-              ],
-              "Roles" : [ { "Ref": "RootRole"}]
+              ]
             }
-          }
+          ]
         },
-        "RootInstanceProfile": {
-          "Type": "AWS::IAM::InstanceProfile",
-          "Properties": {
-            "Path": "/",
-            "Roles": [ {
-              "Ref": "RootRole"
-            } ]
+        "Roles": [
+          {
+            "Ref": "RootRole"
           }
-        }
+        ]
+      }
+    },
+    "RootInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "RootRole"
+          }
+        ]
       }
     }
   }
 }
+
+
 

@@ -118,7 +118,7 @@ bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormation
 {
      Aws::CloudFormation::Model::CreateStackRequest createStackRequest;
     createStackRequest.SetStackName(STACK_NAME);
-    createStackRequest.SetOnFailure(Aws::CloudFormation::Model::OnFailure::DELETE_)
+    createStackRequest.SetOnFailure(Aws::CloudFormation::Model::OnFailure::DELETE_);
     std::ifstream ifstream("/Users/meyertst/Development/aws-doc-sdk-examples/cpp/example_code/medical-imaging/CfnImportBucketTemplate.json");
 
     if (!ifstream)
@@ -148,7 +148,9 @@ bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormation
     policyName += (Aws::Utils::UUID::RandomUUID());
     createStackRequest.SetParameters(
             { Aws::CloudFormation::Model::Parameter().WithParameterKey("BucketName").WithParameterValue(bucketName),
-              Aws::CloudFormation::Model::Parameter().WithParameterKey("PolicyName").WithParameterValue(policyName)});
+              Aws::CloudFormation::Model::Parameter().WithParameterKey("PolicyName").WithParameterValue(policyName),
+              Aws::CloudFormation::Model::Parameter().WithParameterKey("DatastoreArn").WithParameterValue("arn:aws:medical-imaging:us-east-1:123502194722:datastore/b62634992c0e44079cd6bcab0210d464"),
+              Aws::CloudFormation::Model::Parameter().WithParameterKey("UserID").WithParameterValue("123502194722")});
     createStackRequest.SetCapabilities({Aws::CloudFormation::Model::Capability::CAPABILITY_IAM});
 
     createStackRequest.SetTemplateBody(templateBody);
