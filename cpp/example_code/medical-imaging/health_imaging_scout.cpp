@@ -19,12 +19,16 @@
 #include <aws/cloudformation/model/CreateStackRequest.h>
 #include <aws/cloudformation/model/DeleteStackRequest.h>
 #include <aws/cloudformation/model/DescribeStacksRequest.h>
+#include <aws/medical-imaging/MedicalImagingClient.h>
+#include <aws/medical-imaging/model/StartDICOMImportJobRequest.h>
+#include <aws/medical-imaging/model/GetDICOMImportJobRequest.h>
 #include <aws/core/utils/UUID.h>
 #include <fstream>
 
 const char STACK_NAME[] = "health-imaging-scout";
 
-bool waitStackCreated(Aws::CloudFormation::CloudFormationClient &cloudFormationClient, const std::string &stackName)
+bool waitStackCreated(Aws::CloudFormation::CloudFormationClient &cloudFormationClient, const std::string &stackName,
+                      Aws::Vector<Aws::CloudFormation::Model::Output>& outputs)
 {
     Aws::CloudFormation::Model::DescribeStacksRequest describeStacksRequest;
     describeStacksRequest.SetStackName(stackName);
@@ -37,19 +41,18 @@ bool waitStackCreated(Aws::CloudFormation::CloudFormationClient &cloudFormationC
         if (outcome.IsSuccess())
         {
             const auto& stacks = outcome.GetResult().GetStacks();
-            if (!stacks.empty())
-            {
+            if (!stacks.empty()) {
                 const auto &stack = stacks[0];
                 stackStatus = stack.GetStackStatus();
-                if (stackStatus != Aws::CloudFormation::Model::StackStatus::CREATE_IN_PROGRESS  &&
-                    stackStatus != Aws::CloudFormation::Model::StackStatus::CREATE_COMPLETE)
-                {
-                    std::cerr << "Failed to create stack because " << stack.GetStackStatusReason() << std::endl;
+                if (stackStatus ==
+                    Aws::CloudFormation::Model::StackStatus::CREATE_COMPLETE) {
+                    outputs = stack.GetOutputs();
                 }
-
+                else if (stackStatus != Aws::CloudFormation::Model::StackStatus::CREATE_IN_PROGRESS) {
+                    std::cerr << "Failed to create stack because "
+                              << stack.GetStackStatusReason() << std::endl;
+                }
             }
-
-
         }
     }
 
@@ -112,7 +115,8 @@ bool waitStackDeleted(Aws::CloudFormation::CloudFormationClient &cloudFormationC
     return stackStatus == Aws::CloudFormation::Model::StackStatus::DELETE_COMPLETE;
 }
 
-
+bool startDicomImport(const Aws::MedicalImaging::MedicalImagingClient &medicalImagingClient,
+                          const Aws::String &dataStoreArn, const Aws::String &bucketName,
 
 bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormationClient)
 {
@@ -129,7 +133,7 @@ bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormation
 
     std::stringstream stringstream;
     stringstream << ifstream.rdbuf();
-    std::string templateBody = stringstream.str();
+    createStackRequest.SetTemplateBody(stringstream.str());
 
     std::string bucketName = "health-imaging-import-";
     bucketName += (Aws::Utils::UUID::RandomUUID());
@@ -137,8 +141,6 @@ bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormation
     {
         bucketName = bucketName.substr(0, 63);
     }
-
-
 
     std::transform(bucketName.begin(), bucketName.end(), bucketName.begin(),
                    [](unsigned char c){ return std::tolower(c); });
@@ -153,17 +155,37 @@ bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormation
               Aws::CloudFormation::Model::Parameter().WithParameterKey("UserID").WithParameterValue("123502194722")});
     createStackRequest.SetCapabilities({Aws::CloudFormation::Model::Capability::CAPABILITY_IAM});
 
-    createStackRequest.SetTemplateBody(templateBody);
     auto outcome = cloudFormationClient.CreateStack(createStackRequest);
     bool result = false;
+    Aws::Vector<Aws::CloudFormation::Model::Output> outputs;
     if (outcome.IsSuccess())
     {
         std::cout << "Stack creation initiated." << std::endl;
-        result = waitStackCreated(cloudFormationClient, STACK_NAME);
+        result = waitStackCreated(cloudFormationClient, STACK_NAME, outputs);
     }
     else {
         std::cerr << "Failed to create stack" << outcome.GetError().GetMessage()
                   << std::endl;
+    }
+
+    Aws::String roleArn;
+    Aws::String bucketArn;
+    if (!outputs.empty()) {
+        for (auto &output : outputs) {
+            if (output.GetOutputKey() == "BucketArn") {
+                bucketArn = output.GetOutputValue();
+            }
+            else if (output.GetOutputKey() == "RoleArn") {
+                roleArn = output.GetOutputValue();
+            }
+        }
+    }
+    else {
+        std::cerr <<  "Failed to get stack outputs" << std::endl;
+    }
+
+    if (!roleArn.empty() && !bucketArn.empty()) {
+
     }
 
     return result;

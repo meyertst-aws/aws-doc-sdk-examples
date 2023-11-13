@@ -18,7 +18,7 @@
     }
   },
   "Resources": {
-    "bucket": {
+    "Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": {
@@ -143,6 +143,16 @@
           }
         ]
       }
+    }
+  },
+  "Outputs" : {
+    "BucketArn" : {
+      "Description": "The Arn of the S3 bucket",
+      "Value" : { "Fn::GetAtt" : [ "Bucket", "Arn" ]}
+    },
+    "RoleArn" : {
+      "Description": "The Arn of the Role",
+      "Value" : { "Fn::GetAtt" : [ "RootRole", "Arn" ]}
     }
   }
 }
