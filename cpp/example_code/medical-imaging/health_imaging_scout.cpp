@@ -117,12 +117,16 @@ bool waitStackDeleted(Aws::CloudFormation::CloudFormationClient &cloudFormationC
 
 bool startDicomImport(const Aws::MedicalImaging::MedicalImagingClient &medicalImagingClient,
                           const Aws::String &dataStoreArn, const Aws::String &bucketName,
+            const Aws::String &roleArn)
+{
+    Aws::MedicalImaging::Model::StartDICOMImportJobRequest startDICOMImportJobRequest;
+}
 
 bool CreateImportStack(Aws::CloudFormation::CloudFormationClient &cloudFormationClient)
 {
      Aws::CloudFormation::Model::CreateStackRequest createStackRequest;
     createStackRequest.SetStackName(STACK_NAME);
-    createStackRequest.SetOnFailure(Aws::CloudFormation::Model::OnFailure::DELETE_);
+//    createStackRequest.SetOnFailure(Aws::CloudFormation::Model::OnFailure::DELETE_);
     std::ifstream ifstream("/Users/meyertst/Development/aws-doc-sdk-examples/cpp/example_code/medical-imaging/CfnImportBucketTemplate.json");
 
     if (!ifstream)

@@ -132,27 +132,26 @@
           }
         ]
       }
-    },
-    "RootInstanceProfile": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Properties": {
-        "Path": "/",
-        "Roles": [
-          {
-            "Ref": "RootRole"
-          }
-        ]
-      }
     }
   },
-  "Outputs" : {
-    "BucketArn" : {
+  "Outputs": {
+    "BucketArn": {
       "Description": "The Arn of the S3 bucket",
-      "Value" : { "Fn::GetAtt" : [ "Bucket", "Arn" ]}
+      "Value": {
+        "Fn::GetAtt": [
+          "Bucket",
+          "Arn"
+        ]
+      }
     },
-    "RoleArn" : {
+    "RoleArn": {
       "Description": "The Arn of the Role",
-      "Value" : { "Fn::GetAtt" : [ "RootRole", "Arn" ]}
+      "Value": {
+        "Fn::GetAtt": [
+          "RootRole",
+          "Arn"
+        ]
+      }
     }
   }
 }
