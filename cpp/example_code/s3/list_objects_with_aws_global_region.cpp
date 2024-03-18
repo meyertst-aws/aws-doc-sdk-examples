@@ -119,12 +119,17 @@ listTheObjects(const Aws::S3::S3Client &s3Client, const Aws::String &bucketName)
                       listObjectOutcome.GetError() << std::endl;
             return false;
         }
+<<<<<<< HEAD
 
     } while (!continuationToken.empty());
 
     std::cout << "Success. Found " << objects.size() << " objects in the bucket." <<
               std::endl;
 
+=======
+    } while (!continuationToken.empty());
+
+>>>>>>> ad856adea (S3 Object Integrity Workflow)
     return true;
 }
 //! Helper routine to delete a bucket.
