@@ -22,7 +22,8 @@ namespace AwsDocTest {
         std::vector<Aws::String> bucketNames = GetCachedS3Buckets(BUCKETS_NEEDED);
         ASSERT_GE(bucketNames.size(), BUCKETS_NEEDED) << "Failed to meet precondition" << std::endl;
 
-        bool result = AwsDoc::S3::ListObjects(bucketNames[0], *s_clientConfig);
+        Aws::Vector<Aws::String> objectsResult;
+        bool result = AwsDoc::S3::ListObjects(bucketNames[0], objectsResult, *s_clientConfig);
         EXPECT_TRUE(result);
     }
 } // namespace AwsDocTest

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <aws/core/Aws.h>
 #include <aws/s3/S3Client.h>
-#include <aws/s3/model/ListObjectsRequest.h>
+#include <aws/s3/model/ListObjectsV2Request.h>
 #include <aws/s3/model/Object.h>
 #include <awsdoc/s3/s3_examples.h>
 
@@ -30,28 +30,40 @@
 
 // snippet-start:[s3.cpp.list_objects.code]
 bool AwsDoc::S3::ListObjects(const Aws::String &bucketName,
+                             Aws::Vector<Aws::String> &objectsResult,
                              const Aws::Client::ClientConfiguration &clientConfig) {
     Aws::S3::S3Client s3_client(clientConfig);
 
-    Aws::S3::Model::ListObjectsRequest request;
-    request.WithBucket(bucketName);
+    Aws::String continuationToken; // Used for paginated results;
+    do {
+        Aws::S3::Model::ListObjectsV2Request request;
+        request.WithBucket(bucketName);
 
-    auto outcome = s3_client.ListObjects(request);
-
-    if (!outcome.IsSuccess()) {
-        std::cerr << "Error: ListObjects: " <<
-                  outcome.GetError().GetMessage() << std::endl;
-    }
-    else {
-        Aws::Vector<Aws::S3::Model::Object> objects =
-                outcome.GetResult().GetContents();
-
-        for (Aws::S3::Model::Object &object: objects) {
-            std::cout << object.GetKey() << std::endl;
+        if (!continuationToken.empty()) {
+            request.SetContinuationToken(continuationToken);
         }
-    }
 
-    return outcome.IsSuccess();
+        Aws::S3::Model::ListObjectsV2Outcome outcome = s3_client.ListObjectsV2(request);
+
+        if (!outcome.IsSuccess()) {
+            std::cerr << "Error: ListObjects: " <<
+                      outcome.GetError().GetMessage() << std::endl;
+            return false;
+        }
+        else {
+            const Aws::Vector<Aws::S3::Model::Object> &objects =
+                    outcome.GetResult().GetContents();
+
+            for (const Aws::S3::Model::Object &object: objects) {
+                std::cout << object.GetKey() << std::endl;
+            }
+
+            continuationToken = outcome.GetResult().GetNextContinuationToken();
+        }
+
+    } while (!continuationToken.empty());
+
+    return true;
 }
 // snippet-end:[s3.cpp.list_objects.code]
 
@@ -81,7 +93,15 @@ int main()
         Aws::Client::ClientConfiguration clientConfig;
         // Optional: Set to the AWS Region in which the bucket was created (overrides config file).
         // clientConfig.region = "us-east-1";
-        AwsDoc::S3::ListObjects(bucket_name, clientConfig);
+
+        Aws::Vector <Aws::String> objectsResult;
+        if (AwsDoc::S3::ListObjects(bucket_name, objectsResult, clientConfig)) {
+            std::cout << objectsResult.size() << " object(s) retrieved." << std::endl;
+            for (auto object : objectsResult) {
+                std::cout << "   " << object << std::endl;
+            }
+        }
+
      }
     Aws::ShutdownAPI(options);
 

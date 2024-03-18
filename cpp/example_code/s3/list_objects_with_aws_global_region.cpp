@@ -9,7 +9,7 @@
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/CreateBucketRequest.h>
 #include <aws/s3/model/HeadBucketRequest.h>
-#include <aws/s3/model/ListObjectsRequest.h>
+#include <aws/s3/model/ListObjectsV2Request.h>
 #include <aws/s3/model/DeleteBucketRequest.h>
 #include <aws/core/utils/UUID.h>
 #include "awsdoc/s3/s3_examples.h"
@@ -92,22 +92,32 @@ static Aws::String CreateOneBucket(const Aws::S3::S3Client &s3Client) {
 static bool ListTheObjects(const Aws::S3::S3Client &s3Client, const Aws::String &bucketName) {
     // An S3 API client set to the aws-global AWS Region should be able to get 
     // access to a bucket in any AWS Region.
-    Aws::S3::Model::ListObjectsRequest listObjectsRequest;
-    listObjectsRequest.SetBucket(bucketName);
-    auto listObjectOutcome = s3Client.ListObjects(listObjectsRequest);
 
-    if (listObjectOutcome.IsSuccess()) {
-        std::cout << "Success. Number of objects in the bucket named '" <<
-                  bucketName << "' is " <<
-                  listObjectOutcome.GetResult().GetContents().size() << "." <<
-                  std::endl;
-    }
-    else {
-        std::cerr << "Error. Could not count the objects in the bucket: " <<
-                  listObjectOutcome.GetError() << std::endl;
-    }
+    Aws::String continuationToken; // Used for paginated results.
 
-    return listObjectOutcome.IsSuccess();
+    do {
+        Aws::S3::Model::ListObjectsV2Request listObjectsRequest;
+        listObjectsRequest.SetBucket(bucketName);
+        if (!continuationToken.empty()) {
+            listObjectsRequest.SetContinuationToken(continuationToken);
+        }
+        auto listObjectOutcome = s3Client.ListObjectsV2(listObjectsRequest);
+
+        if (listObjectOutcome.IsSuccess()) {
+            std::cout << "Success. Number of objects in the bucket named '" <<
+                      bucketName << "' is " <<
+                      listObjectOutcome.GetResult().GetContents().size() << "." <<
+                      std::endl;
+            continuationToken = listObjectOutcome.GetResult().GetNextContinuationToken();
+        }
+        else {
+            std::cerr << "Error. Could not count the objects in the bucket: " <<
+                      listObjectOutcome.GetError() << std::endl;
+            return false;
+        }
+    } while (!continuationToken.empty());
+
+    return true;
 }
 //! Helper routine to delete a bucket.
 /*!

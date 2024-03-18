@@ -55,6 +55,7 @@ namespace AwsDoc {
         bool ListBucketDisablingDnsCache(const Aws::Client::ClientConfiguration &clientConfig);
 
         bool ListObjects(const Aws::String &bucketName,
+                         Aws::Vector<Aws::String> &objectsResult,
                          const Aws::Client::ClientConfiguration &clientConfig);
 
         bool ListObjectsWithAWSGlobalRegion(const Aws::Client::ClientConfiguration &clientConfig);
