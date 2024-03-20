@@ -55,7 +55,7 @@ bool AwsDoc::S3::ListObjects(const Aws::String &bucketName,
                     outcome.GetResult().GetContents();
 
             for (const Aws::S3::Model::Object &object: objects) {
-                std::cout << object.GetKey() << std::endl;
+                objectsResult.push_back(object.GetKey());
             }
 
             continuationToken = outcome.GetResult().GetNextContinuationToken();
