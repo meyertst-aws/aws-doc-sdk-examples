@@ -426,6 +426,7 @@ bool AwsDoc::S3::s3ObjectIntegrityWorkflow(
         std::cout << "  " << hashMethod << " - " << stringForHashMethod(hashMethod)
                   << std::endl;
     }
+#endif
 
     HASH_METHOD chosenHashMethod = askQuestionForIntRange("Enter an index: ", DEFAULT,
                                                           SHA256);
