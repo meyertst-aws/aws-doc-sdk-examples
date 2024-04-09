@@ -34,23 +34,20 @@ For prerequisites, see the [README](../README.md#Prerequisites) in the `gov2` fo
 
 - [Hello Amazon Bedrock](hello/hello.go#L4) (`InvokeModel`)
 
-
-### Single actions
-
-Code excerpts that show you how to call individual service functions.
-
-- [Image generation with Amazon Titan Image Generator G1](actions/invoke_model.go#L178) (`InvokeModel`)
-- [Text generation with AI21 Labs Jurassic-2](actions/invoke_model.go#L78) (`InvokeModel`)
-- [Text generation with Anthropic Claude 2](actions/invoke_model.go#L27) (`InvokeModel`)
-- [Text generation with Anthropic Claude 2 with a response stream](actions/invoke_model_with_response_stream.go#L30) (`InvokeModelWithResponseStream`)
-- [Text generation with Meta Llama 2 Chat](actions/invoke_model.go#L130) (`InvokeModel`)
-
 ### Scenarios
 
 Code examples that show you how to accomplish a specific task by calling multiple
 functions within the same service.
 
 - [Invoke multiple foundation models on Amazon Bedrock](scenarios/scenario_invoke_models.go)
+
+### Invoke model examples
+
+- [AI21 Labs Jurassic-2: Text generation](actions/invoke_model.go#L78)
+- [Amazon Titan: Image generation](actions/invoke_model.go#L178)
+- [Anthropic Claude 2: Real-time response stream processing](actions/invoke_model_with_response_stream.go#L30)
+- [Anthropic Claude 2: Text generation](actions/invoke_model.go#L27)
+- [Meta Llama 2: Text generation](actions/invoke_model.go#L130)
 
 
 <!--custom.examples.start-->
@@ -91,20 +88,15 @@ go run ./cmd -h
 
 #### Invoke multiple foundation models on Amazon Bedrock
 
-This example shows you how to invoke multiple foundation models on Amazon Bedrock.
-
-- Generate text with Anthropic Claude.
-- Generate text with AI21 Labs Jurassic-2.
-- Generate text with Meta Llama 2 Chat.
-- Asynchronously process the response stream from Anthropic Claude.
-- Generate an image with the Amazon Titan Image Generator.
-
-<!--custom.scenario_prereqs.bedrock-runtime_Scenario_InvokeModelsInclResponseStream.start-->
-<!--custom.scenario_prereqs.bedrock-runtime_Scenario_InvokeModelsInclResponseStream.end-->
+This example shows you how to prepare and send a prompt to a variety of large-language models (LLMs) on Amazon Bedrock
 
 
-<!--custom.scenarios.bedrock-runtime_Scenario_InvokeModelsInclResponseStream.start-->
-<!--custom.scenarios.bedrock-runtime_Scenario_InvokeModelsInclResponseStream.end-->
+<!--custom.scenario_prereqs.bedrock-runtime_Scenario_InvokeModels.start-->
+<!--custom.scenario_prereqs.bedrock-runtime_Scenario_InvokeModels.end-->
+
+
+<!--custom.scenarios.bedrock-runtime_Scenario_InvokeModels.start-->
+<!--custom.scenarios.bedrock-runtime_Scenario_InvokeModels.end-->
 
 ### Tests
 

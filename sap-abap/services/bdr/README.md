@@ -28,13 +28,10 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `sap-a
 
 <!--custom.prerequisites.start-->
 <!--custom.prerequisites.end-->
+### Invoke model examples
 
-### Single actions
-
-Code excerpts that show you how to call individual service functions.
-
-- [Image generation with Stability.ai Stable Diffusion XL](zcl_aws1_bdr_actions.clas.abap#L179) (`InvokeModel`)
-- [Text generation with Anthropic Claude 2](zcl_aws1_bdr_actions.clas.abap#L109) (`InvokeModel`)
+- [Anthropic Claude 2: Text generation](zcl_aws1_bdr_actions.clas.abap#L109)
+- [Stable Diffusion: Image generation](zcl_aws1_bdr_actions.clas.abap#L179)
 
 
 <!--custom.examples.start-->

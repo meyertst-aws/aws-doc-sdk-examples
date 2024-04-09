@@ -29,14 +29,31 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `javav
 <!--custom.prerequisites.start-->
 <!--custom.prerequisites.end-->
 
+### Get started
+
+- [Hello Amazon Redshift](src/main/java/com/example/redshift/HelloRedshift.java#L6) (`describeClusters`)
+
+
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
 
-- [Create a cluster](src/main/java/com/example/redshift/CreateAndModifyCluster.java#L91) (`CreateCluster`)
-- [Delete a cluster](src/main/java/com/example/redshift/DeleteCluster.java#L6) (`DeleteCluster`)
-- [Describe your clusters](src/main/java/com/example/redshift/DescribeClusters.java#L6) (`DescribeClusters`)
-- [Modify a cluster](src/main/java/com/example/redshift/CreateAndModifyCluster.java#L150) (`ModifyCluster`)
+- [Create a cluster](src/main/java/com/example/scenario/RedshiftScenario.java#L498) (`CreateCluster`)
+- [Create a table](src/main/java/com/example/scenario/RedshiftScenario.java#L475) (`CreateTable`)
+- [Delete a cluster](src/main/java/com/example/scenario/RedshiftScenario.java#L247) (`DeleteCluster`)
+- [Describe a query statement](src/main/java/com/example/scenario/RedshiftScenario.java#L324) (`DescribeStatement`)
+- [Describe clusters](src/main/java/com/example/scenario/RedshiftScenario.java#L430) (`DescribeClusters`)
+- [Get the statement result](src/main/java/com/example/scenario/RedshiftScenario.java#L408) (`GetStatementResult`)
+- [Insert data into a table](src/main/java/com/example/scenario/RedshiftScenario.java#L265) (`Insert`)
+- [Modify a cluster](src/main/java/com/example/scenario/RedshiftScenario.java#L356) (`ModifyCluster`)
+- [Query a table](src/main/java/com/example/scenario/RedshiftScenario.java#L375) (`Query`)
+
+### Scenarios
+
+Code examples that show you how to accomplish a specific task by calling multiple
+functions within the same service.
+
+- [Get started with Amazon Redshift](src/main/java/com/example/scenario/RedshiftScenario.java)
 
 
 <!--custom.examples.start-->
@@ -50,7 +67,23 @@ Code excerpts that show you how to call individual service functions.
 <!--custom.instructions.start-->
 <!--custom.instructions.end-->
 
+#### Hello Amazon Redshift
 
+This example shows you how to get started using Amazon Redshift.
+
+
+
+#### Get started with Amazon Redshift
+
+This example shows you how to work with Amazon Redshift tables, items, and queries.
+
+
+<!--custom.scenario_prereqs.redshift_Scenario.start-->
+<!--custom.scenario_prereqs.redshift_Scenario.end-->
+
+
+<!--custom.scenarios.redshift_Scenario.start-->
+<!--custom.scenarios.redshift_Scenario.end-->
 
 ### Tests
 

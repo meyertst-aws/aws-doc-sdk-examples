@@ -36,21 +36,18 @@ python -m pip install -r requirements.txt
 > ⚠ You must request access to a model before you can use it. If you try to use the model (with the API or console) before you have requested access to it, you will receive an error message. For more information, see [Model access](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
 > 
 <!--custom.prerequisites.end-->
+### Invoke model examples
 
-### Single actions
-
-Code excerpts that show you how to call individual service functions.
-
-- [Image generation with Amazon Titan Image Generator G1](bedrock_runtime_wrapper.py#L275) (`InvokeModel`)
-- [Image generation with Stability.ai Stable Diffusion XL](bedrock_runtime_wrapper.py#L232) (`InvokeModel`)
-- [Multimodal image analysis with Anthropic Claude 3](models/anthropic/claude_3.py#L94) (`InvokeModel`)
-- [Text generation with AI21 Labs Jurassic-2](bedrock_runtime_wrapper.py#L79) (`InvokeModel`)
-- [Text generation with Anthropic Claude 2](bedrock_runtime_wrapper.py#L39) (`InvokeModel`)
-- [Text generation with Anthropic Claude 2 with a response stream](bedrock_runtime_wrapper.py#L320) (`InvokeModelWithResponseStream`)
-- [Text generation with Anthropic Claude 3](models/anthropic/claude_3.py#L33) (`InvokeModel`)
-- [Text generation with Meta Llama 2 Chat](bedrock_runtime_wrapper.py#L115) (`InvokeModel`)
-- [Text generation with Mistral 7B](bedrock_runtime_wrapper.py#L152) (`InvokeModel`)
-- [Text generation with Mixtral 8x7B](bedrock_runtime_wrapper.py#L192) (`InvokeModel`)
+- [AI21 Labs Jurassic-2: Text generation](bedrock_runtime_wrapper.py#L79)
+- [Amazon Titan: Image generation](bedrock_runtime_wrapper.py#L275)
+- [Anthropic Claude 2: Real-time response stream processing](bedrock_runtime_wrapper.py#L320)
+- [Anthropic Claude 2: Text generation](bedrock_runtime_wrapper.py#L39)
+- [Anthropic Claude 3: Multimodal invocation](models/anthropic/claude_3.py#L94)
+- [Anthropic Claude 3: Text generation](models/anthropic/claude_3.py#L33)
+- [Meta Llama 2: Text generation](bedrock_runtime_wrapper.py#L115)
+- [Mistral AI: Text generation with Mistral 7B Instruct](bedrock_runtime_wrapper.py#L152)
+- [Mistral AI: Text generation with Mixtral 8x7B Instruct](bedrock_runtime_wrapper.py#L192)
+- [Stable Diffusion: Image generation](bedrock_runtime_wrapper.py#L232)
 
 
 <!--custom.examples.start-->

@@ -762,6 +762,7 @@ cross_Testing:
   title: Example approaches for unit and integration testing with an &AWS; SDK
   title_abbrev: Unit and integration test with an SDK
   synopsis: examples for best-practice techniques when writing unit and integration tests using an &AWS; SDK.
+  category: Scenarios
   languages:
     Rust:
       versions:
@@ -796,3 +797,18 @@ cross_ServerlessPromptChaining:
     bedrock-agent:
     bedrock-agent-runtime:
     sfn:
+cross_ServerlessS3DataTransformation:
+  title: Transform data for your application with S3 Object Lambda
+  title_abbrev: Transform data with S3 Object Lambda
+  synopsis: transform data for your application with S3 Object Lambda.
+  category: Cross-service examples
+  languages:
+    .NET:
+      versions:
+        - sdk_version: 3
+          github: dotnetv3/cross-service/S3ObjectLambdaFunction
+          block_content: cross_S3ObjectLambdaFunction.xml
+  service_main: s3
+  services:
+    s3:
+    lambda:
