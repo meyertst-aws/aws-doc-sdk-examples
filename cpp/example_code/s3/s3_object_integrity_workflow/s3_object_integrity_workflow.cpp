@@ -330,6 +330,8 @@ namespace AwsDoc::S3 {
     */
     bool createLargeFileIfNotExists();
 
+    void introductoryExplanations(const Aws::String &bucketName);
+
     //! Test routine passed as argument to askQuestion routine.
     /*!
      \param string: A string to test.
