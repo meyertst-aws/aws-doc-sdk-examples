@@ -330,7 +330,16 @@ namespace AwsDoc::S3 {
     */
     bool createLargeFileIfNotExists();
 
+
     void introductoryExplanations(const Aws::String &bucketName);
+    void explainPutObjectResults();
+    void introductoryTransferManagerUploadExplanations(const Aws::String &objectKey);
+    void multiPartUploadExplanationsPart2(const Aws::String &objectKey,
+                                          HASH_METHOD chosenHashMethod);
+    void verifyHashingResults(const Aws::String &retrievedHash, const Hasher &localHash,
+                              const Aws::String &uploadtype, HASH_METHOD hashMethod,
+                              const std::vector<Aws::String> &retrievedPartHashes = std::vector<Aws::String>(),
+                              const std::vector<Aws::String> &localPartHashes = std::vector<Aws::String>());
 
     //! Test routine passed as argument to askQuestion routine.
     /*!
