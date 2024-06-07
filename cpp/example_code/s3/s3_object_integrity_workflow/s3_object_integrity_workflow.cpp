@@ -332,14 +332,20 @@ namespace AwsDoc::S3 {
 
 
     void introductoryExplanations(const Aws::String &bucketName);
+
     void explainPutObjectResults();
+
     void introductoryTransferManagerUploadExplanations(const Aws::String &objectKey);
+
     void multiPartUploadExplanationsPart2(const Aws::String &objectKey,
                                           HASH_METHOD chosenHashMethod);
+
     void verifyHashingResults(const Aws::String &retrievedHash, const Hasher &localHash,
                               const Aws::String &uploadtype, HASH_METHOD hashMethod,
                               const std::vector<Aws::String> &retrievedPartHashes = std::vector<Aws::String>(),
                               const std::vector<Aws::String> &localPartHashes = std::vector<Aws::String>());
+
+    bool createLargeFileIfNotExists();
 
     //! Test routine passed as argument to askQuestion routine.
     /*!
@@ -408,6 +414,11 @@ bool AwsDoc::S3::s3ObjectIntegrityWorkflow(
     /*
      * Create a large file to be used for multipart uploads.
      */
+    if (!createLargeFileIfNotExists()) {
+        std::cerr << "Workflow exiting because large file creation failed." << std::endl;
+        return false;
+    }
+
     if (!createLargeFileIfNotExists()) {
         std::cerr << "Workflow exiting because large file creation failed." << std::endl;
         return false;
