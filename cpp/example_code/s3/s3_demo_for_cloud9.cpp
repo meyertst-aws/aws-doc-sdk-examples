@@ -116,7 +116,7 @@ bool DeleteTheBucket(const Aws::S3::S3Client &s3Client,
     return outcome.IsSuccess();
 }
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 // Create an S3 bucket and then delete it.
 // Before and after creating the bucket, and again after deleting the bucket,
 // try to determine whether that bucket still exists. 
@@ -164,5 +164,5 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-#endif  // TESTING_BUILD
+#endif  // EXCLUDE_MAIN_FUNCTION
 // snippet-end:[s3.cpp.bucket_operations.list_create_delete]

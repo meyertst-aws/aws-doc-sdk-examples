@@ -66,7 +66,7 @@ bool AwsDoc::S3::DeleteObject(const Aws::String &objectKey,
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     //TODO(user): The object_key is the unique identifier for the object in the bucket. In this example set,
@@ -89,4 +89,4 @@ int main() {
     return 0;
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION

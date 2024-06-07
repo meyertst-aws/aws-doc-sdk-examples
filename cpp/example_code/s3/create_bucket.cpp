@@ -67,7 +67,7 @@ bool AwsDoc::S3::CreateBucket(const Aws::String &bucketName,
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     Aws::SDKOptions options;
@@ -91,5 +91,5 @@ int main() {
     ShutdownAPI(options);
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION
 

@@ -158,7 +158,7 @@ Aws::String GetPermissionString(const Aws::S3::Model::Permission &permission) {
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     //TODO(user): Name of your bucket.
@@ -177,5 +177,5 @@ int main() {
     return 0;
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION
 

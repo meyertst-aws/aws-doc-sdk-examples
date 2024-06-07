@@ -115,6 +115,9 @@ namespace AwsDoc {
                              const Aws::String &granteeEmailAddress = "",
                              const Aws::String &granteeURI = "");
 
+        bool s3ObjectIntegrityWorkflow(
+                const Aws::Client::ClientConfiguration &clientConfiguration);
+
         extern std::mutex upload_mutex;
 
         extern std::condition_variable upload_variable;

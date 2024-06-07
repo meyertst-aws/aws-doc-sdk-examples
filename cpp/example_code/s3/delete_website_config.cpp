@@ -63,7 +63,7 @@ bool AwsDoc::S3::DeleteBucketWebsite(const Aws::String &bucketName,
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     //TODO(user): Change bucketName to the name of a bucket in your account.
@@ -83,4 +83,4 @@ int main() {
     ShutdownAPI(options);
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION

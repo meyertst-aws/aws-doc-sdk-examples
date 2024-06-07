@@ -285,7 +285,7 @@ Aws::S3::Model::Type SetGranteeType(const Aws::String &type) {
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     //TODO(user): Name of your bucket that already contains an object.
@@ -354,5 +354,5 @@ int main() {
     return 0;
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION
 

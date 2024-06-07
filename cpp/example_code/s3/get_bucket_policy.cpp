@@ -70,7 +70,7 @@ bool AwsDoc::S3::GetBucketPolicy(const Aws::String &bucketName,
  *
 */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     //TODO(user): Change bucket_name to the name of a bucket in your account.
@@ -89,4 +89,4 @@ int main() {
     return 0;
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION

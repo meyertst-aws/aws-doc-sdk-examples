@@ -54,7 +54,7 @@ bool AwsDoc::S3::ListBuckets(const Aws::Client::ClientConfiguration &clientConfi
  *
 */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     //The Aws::SDKOptions struct contains SDK configuration options.
@@ -78,4 +78,4 @@ int main() {
     return 0;
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION

@@ -69,7 +69,7 @@ bool AwsDoc::S3::CopyObject(const Aws::String &objectKey, const Aws::String &fro
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     Aws::SDKOptions options;
@@ -96,5 +96,5 @@ int main() {
     return 0;
 }
 
-#endif // TESTING_BUILD
+#endif // EXCLUDE_MAIN_FUNCTION
 

@@ -121,7 +121,7 @@ bool AwsDoc::S3::PutObjectAsync(const Aws::S3::S3Client &s3Client,
  *
  */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 // snippet-start:[s3.cpp.put_object_async.invoke.code]
 int main() {
@@ -168,4 +168,4 @@ int main() {
 }
 // snippet-end:[s3.cpp.put_object_async.invoke.code]
 
-#endif  // TESTING_BUILD
+#endif  // EXCLUDE_MAIN_FUNCTION

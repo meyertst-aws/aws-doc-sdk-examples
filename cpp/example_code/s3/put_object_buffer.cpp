@@ -71,7 +71,7 @@ bool AwsDoc::S3::PutObjectBuffer(const Aws::String &bucketName,
 *
 */
 
-#ifndef TESTING_BUILD
+#ifndef EXCLUDE_MAIN_FUNCTION
 
 int main() {
     Aws::SDKOptions options;
@@ -94,4 +94,4 @@ int main() {
     return 0;
 }
 
-#endif  // TESTING_BUILD
+#endif  // EXCLUDE_MAIN_FUNCTION
