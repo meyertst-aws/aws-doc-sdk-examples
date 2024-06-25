@@ -330,15 +330,25 @@ namespace AwsDoc::S3 {
     */
     bool createLargeFileIfNotExists();
 
-
+//! Console interaction introducing the workflow.
+/*!
+  \param bucketName: The name of the S3 bucket to use.
+*/
     void introductoryExplanations(const Aws::String &bucketName);
 
+//! Console interaction which explains the PutObject results.
+/*!
+*/
     void explainPutObjectResults();
 
+//! Console interaction explaining transfer manager uploads.
+/*!
+  \param objectKey: The key for the object being uploaded.
+*/
     void introductoryTransferManagerUploadExplanations(const Aws::String &objectKey);
 
-    void multiPartUploadExplanationsPart2(const Aws::String &objectKey,
-                                          HASH_METHOD chosenHashMethod);
+    void multiPartUploadExplanations(const Aws::String &objectKey,
+                                     HASH_METHOD chosenHashMethod);
 
     void verifyHashingResults(const Aws::String &retrievedHash, const Hasher &localHash,
                               const Aws::String &uploadtype, HASH_METHOD hashMethod,
@@ -347,11 +357,11 @@ namespace AwsDoc::S3 {
 
     bool createLargeFileIfNotExists();
 
-    //! Test routine passed as argument to askQuestion routine.
-    /*!
-     \param string: A string to test.
-     \return bool: True if empty.
-     */
+//! Test routine passed as argument to askQuestion routine.
+/*!
+ \param string: A string to test.
+ \return bool: True if empty.
+ */
     static bool testForEmptyString(const Aws::String &string);
 
     //! Command line prompt/response utility function.
@@ -419,6 +429,9 @@ bool AwsDoc::S3::s3ObjectIntegrityWorkflow(
         return false;
     }
 
+    /*
+     * Create a large file to be used for multi-part uploads.
+     */
     if (!createLargeFileIfNotExists()) {
         std::cerr << "Workflow exiting because large file creation failed." << std::endl;
         return false;
