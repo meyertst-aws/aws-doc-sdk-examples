@@ -330,38 +330,41 @@ namespace AwsDoc::S3 {
     */
     bool createLargeFileIfNotExists();
 
-//! Console interaction introducing the workflow.
-/*!
-  \param bucketName: The name of the S3 bucket to use.
-*/
+    //! Console interaction introducing the workflow.
+    /*!
+      \param bucketName: The name of the S3 bucket to use.
+    */
     void introductoryExplanations(const Aws::String &bucketName);
 
-//! Console interaction which explains the PutObject results.
-/*!
-*/
+    //! Console interaction which explains the PutObject results.
+    /*!
+    */
     void explainPutObjectResults();
 
-//! Console interaction explaining transfer manager uploads.
-/*!
-  \param objectKey: The key for the object being uploaded.
-*/
+    //! Console interaction explaining transfer manager uploads.
+    /*!
+      \param objectKey: The key for the object being uploaded.
+    */
     void introductoryTransferManagerUploadExplanations(const Aws::String &objectKey);
 
+    //! Console interaction explaining multi-part uploads.
+    /*!
+      \param objectKey: The key for the object being uploaded.
+      \param chosenHashMethod: The hash method selected by the user.
+    */
     void multiPartUploadExplanations(const Aws::String &objectKey,
                                      HASH_METHOD chosenHashMethod);
 
-    void verifyHashingResults(const Aws::String &retrievedHash, const Hasher &localHash,
-                              const Aws::String &uploadtype, HASH_METHOD hashMethod,
-                              const std::vector<Aws::String> &retrievedPartHashes = std::vector<Aws::String>(),
-                              const std::vector<Aws::String> &localPartHashes = std::vector<Aws::String>());
-
+    //! Create a large file for doing multi-part uploads.
+    /*!
+    */
     bool createLargeFileIfNotExists();
 
-//! Test routine passed as argument to askQuestion routine.
-/*!
- \param string: A string to test.
- \return bool: True if empty.
- */
+    //! Test routine passed as argument to askQuestion routine.
+    /*!
+     \param string: A string to test.
+     \return bool: True if empty.
+     */
     static bool testForEmptyString(const Aws::String &string);
 
     //! Command line prompt/response utility function.
@@ -1655,10 +1658,16 @@ Aws::Utils::ByteBuffer AwsDoc::S3::Hasher::getByteBufferHash() const {
     return m_Hash;
 }
 
-//! Test routine passed as argument to askQuestion routine.
+//! Routine which uploads an object to an S3 bucket and calculates a hash value for the object.
 /*!
-\param string: A string to test.
-\return bool: True if empty.
+   \param bucket: The name of the S3 bucket where the object will be uploaded.
+   \param key: The unique identifier (key) for the object within the S3 bucket.
+   \param hashData: The hash value that will be associated with the uploaded object.
+   \param hashMethod: The hashing algorithm to use when calculating the hash value.
+   \param body: The data content of the object being uploaded.
+   \param useDefaultHashMethod: A flag indicating whether to use the default hash method or the one specified in the hashMethod parameter.
+   \param client: The S3 client instance used to perform the upload operation.
+   \return bool: Function succeeded.
 */
 bool AwsDoc::S3::testForEmptyString(const Aws::String &string) {
     if (string.empty()) {
