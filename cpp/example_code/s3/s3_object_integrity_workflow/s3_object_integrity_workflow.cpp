@@ -1234,7 +1234,7 @@ bool AwsDoc::S3::doMultipartUpload(const Aws::String &bucket,
     if (uploadID.empty()) {
         return false;
     }
-
+    // snippet-end:[cpp.example_code.s3.CreateMultipartUpload2]
     std::vector<unsigned char> totalHashBuffer;
     bool uploadSucceeded = true;
     std::streamsize uploadedBytes = 0;
@@ -1307,6 +1307,7 @@ bool AwsDoc::S3::doMultipartUpload(const Aws::String &bucket,
             uploadSucceeded = false;
             break;
         }
+        // snippet-end:[cpp.example_code.s3.UploadPart3]
 
         uploadedBytes += bytesToRead;
         partNumber++;
