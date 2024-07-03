@@ -433,7 +433,7 @@ bool AwsDoc::S3::s3ObjectIntegrityWorkflow(
     }
 
     /*
-     * Create a large file to be used for multi-part uploads.
+     * Create a large file to be used for multipart uploads.
      */
     if (!createLargeFileIfNotExists()) {
         std::cerr << "Workflow exiting because large file creation failed." << std::endl;
@@ -1335,6 +1335,7 @@ bool AwsDoc::S3::doMultipartUpload(const Aws::String &bucket,
                       completeMultipartUploadOutcome.GetError().GetMessage()
                       << std::endl;
         }
+        // snippet-end:[cpp.example_code.s3.CompleteMultipartUpload]
 
         return completeMultipartUploadOutcome.IsSuccess();
     }
