@@ -170,6 +170,18 @@ This example shows you how to work with S3 object integrity features.
 <!--custom.scenarios.s3_Scenario_ObjectIntegrity.start-->
 <!--custom.scenarios.s3_Scenario_ObjectIntegrity.end-->
 
+#### Work with Amazon S3 object integrity
+
+This example shows you how to work with S3 object integrity features.
+
+
+<!--custom.scenario_prereqs.s3_Scenario_ObjectIntegrity.start-->
+<!--custom.scenario_prereqs.s3_Scenario_ObjectIntegrity.end-->
+
+
+<!--custom.scenarios.s3_Scenario_ObjectIntegrity.start-->
+<!--custom.scenarios.s3_Scenario_ObjectIntegrity.end-->
+
 ### Tests
 
 ⚠ Running tests might result in charges to your AWS account.
