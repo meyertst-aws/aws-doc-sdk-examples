@@ -46,9 +46,9 @@ namespace AwsDocTest {
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_CRC32_sdk_checksum_2_
@@ -63,9 +63,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_CRC32C_sdk_checksum_2_
@@ -80,9 +80,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_SHA1_sdk_checksum_2_
@@ -97,9 +97,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_SHA256_sdk_checksum_2_
@@ -114,9 +114,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_default_calc_checksum_2_
@@ -131,9 +131,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_MD5_calc_checksum_2_
@@ -148,9 +148,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_CRC32_calc_checksum_2_
@@ -165,9 +165,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_CRC32C_calc_checksum_2_
@@ -182,9 +182,9 @@ ASSERT_TRUE(result);
                                         "y" // Would you like to delete the resources created in this workflow? (y/n)
                                 });
 
-auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
-ASSERT_TRUE(result);
-}
+        auto result = AwsDoc::S3::s3ObjectIntegrityWorkflow(*s_clientConfig);
+        ASSERT_TRUE(result);
+    }
 
 // NOLINTNEXTLINE(readability-named-parameter)
     TEST_F(S3_GTests, s3_object_integrity_workflow_SHA1_calc_checksum_2_
