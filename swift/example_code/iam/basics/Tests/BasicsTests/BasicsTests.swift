@@ -34,7 +34,7 @@ final class BasicsTests: XCTestCase {
         let tdSem = TestWaiter(name: "Setup")
         super.setUp()
 
-        SDKLoggingSystem.initialize(logLevel: .error)
+    //    SDKLoggingSystem().initialize(logLevel: .error)
 
         // A `Task` is used to allow us to call asynchronous setup functions
         // from within this synchronous function. A `TestWaiter` object is

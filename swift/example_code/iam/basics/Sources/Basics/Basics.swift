@@ -67,7 +67,7 @@ struct ExampleCommand: ParsableCommand {
     /// example.
     // snippet-start:[iam.swift.basics.command.runasync]
     func runAsync() async throws {
-        SDKLoggingSystem.initialize(logLevel: .error)
+        await SDKLoggingSystem().initialize(logLevel: .error)
 
         // Create handlers for the AWS services to use.
 
@@ -325,11 +325,18 @@ struct ExampleCommand: ParsableCommand {
     /// - Parameters:
     ///   - seconds: The number of seconds to wait as a `Double`.
     ///   - message: Optional `String` to display before the pause begins.
-    func waitFor(seconds: Double, message: String? = nil) async {
+    func waitFor(seconds: UInt64, message: String? = nil) async {
         if message != nil {
             print("*** \(message!) ***") 
         }
-        Thread.sleep(forTimeInterval: seconds)
+
+        do {
+            try await Task.sleep(nanoseconds: seconds)
+        }
+        catch {
+            print("Sleep was cancelled")
+        }
+
     }
 }
 // snippet-end:[iam.swift.basics.command]

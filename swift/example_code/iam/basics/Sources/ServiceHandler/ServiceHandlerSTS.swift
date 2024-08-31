@@ -14,6 +14,7 @@ import AWSSTS
 import ClientRuntime
 import SwiftUtilities
 import AWSClientRuntime
+import SmithyIdentity
 // snippet-end:[iam.swift.basics.sts.imports]
 
 /// A class providing functions for interacting with the AWS Security Token
@@ -57,8 +58,8 @@ public class ServiceHandlerSTS {
                             throw ServiceHandlerError.authError
                 }
                 
-                let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(
-                    AWSClientRuntime.Credentials(
+                let awsCredentialIdentityResolver = try StaticAWSCredentialIdentityResolver(
+                    AWSCredentialIdentity(
                         accessKey: keyId,
                         secret: secretKey,
                         sessionToken: sessionToken
@@ -69,7 +70,7 @@ public class ServiceHandlerSTS {
                 // provider. Then create a new `STSClient` using those permissions.
 
                 let s3Config = try await STSClient.STSClientConfiguration(
-                    credentialsProvider: credentialsProvider,
+                    awsCredentialIdentityResolver: awsCredentialIdentityResolver,
                     region: self.region
                 )
                 stsClient = STSClient(config: s3Config)
@@ -97,8 +98,8 @@ public class ServiceHandlerSTS {
             // to generate a static credentials provider suitable for use when
             // initializing an AWS STS client.
 
-                let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(
-                    AWSClientRuntime.Credentials(
+                let awsCredentialIdentityResolver = try StaticAWSCredentialIdentityResolver(
+                    AWSCredentialIdentity(
                         accessKey: accessKeyId,
                         secret: secretAccessKey,
                         sessionToken: sessionToken
@@ -108,7 +109,7 @@ public class ServiceHandlerSTS {
             // Create a new AWS STS client with the specified access credentials.
 
             let stsConfig = try await STSClient.STSClientConfiguration(
-                credentialsProvider: credentialsProvider,
+                awsCredentialIdentityResolver: awsCredentialIdentityResolver,
                 region: self.region
             )
             stsClient = STSClient(config: stsConfig)

@@ -13,6 +13,7 @@ import AWSIAM
 import ClientRuntime
 import AWSClientRuntime
 import SwiftUtilities
+import SmithyIdentity
 // snippet-end:[iam.swift.basics.iam.imports]
 
 public class ServiceHandlerIAM {
@@ -36,7 +37,7 @@ public class ServiceHandlerIAM {
                 sessionToken: String? = nil) async {
         do {
             if accessKeyId == nil {
-                iamClient = try IAMClient(region: self.region)
+                iamClient = try await IAMClient()
             } else {
                 // Use the given access key ID, secret access key, and session token
                 // to generate a static credentials provider suitable for use when
@@ -47,8 +48,8 @@ public class ServiceHandlerIAM {
                             throw ServiceHandlerError.authError
                 }
 
-                let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(
-                    AWSClientRuntime.Credentials(
+                let credentialsProvider = try StaticAWSCredentialIdentityResolver(
+                    AWSCredentialIdentity(
                         accessKey: keyId,
                         secret: secretKey,
                         sessionToken: sessionToken
@@ -60,7 +61,7 @@ public class ServiceHandlerIAM {
                 // permissions.
 
                 let iamConfig = try await IAMClient.IAMClientConfiguration(
-                    credentialsProvider: credentialsProvider,
+                    awsCredentialIdentityResolver: credentialsProvider,
                     region: self.region
                 )
                 iamClient = IAMClient(config: iamConfig)
@@ -87,8 +88,8 @@ public class ServiceHandlerIAM {
             // token to generate a static credentials provider suitable for
             // use when initializing an IAM client.
 
-            let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(
-                AWSClientRuntime.Credentials(
+            let awsCredentialIdentityResolver = try StaticAWSCredentialIdentityResolver(
+                AWSCredentialIdentity(
                     accessKey: accessKeyId,
                     secret: secretAccessKey,
                     sessionToken: sessionToken
@@ -98,7 +99,7 @@ public class ServiceHandlerIAM {
             // Create a new IAM client with the specified access credentials.
 
             let iamConfig = try await IAMClient.IAMClientConfiguration(
-                credentialsProvider: credentialsProvider,
+                awsCredentialIdentityResolver: awsCredentialIdentityResolver,
                 region: self.region
             )
             iamClient = IAMClient(config: iamConfig)

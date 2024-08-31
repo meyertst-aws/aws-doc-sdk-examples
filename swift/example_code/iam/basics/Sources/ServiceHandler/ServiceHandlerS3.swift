@@ -13,6 +13,7 @@ import AWSS3
 import ClientRuntime
 import SwiftUtilities
 import AWSClientRuntime
+import SmithyIdentity
 // snippet-end:[iam.swift.basics.s3.imports]
 
 public class ServiceHandlerS3 {
@@ -55,8 +56,8 @@ public class ServiceHandlerS3 {
                             throw ServiceHandlerError.authError
                 }
 
-                let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(
-                    AWSClientRuntime.Credentials(
+                let awsCredentialIdentityResolver = try StaticAWSCredentialIdentityResolver(
+                    AWSCredentialIdentity(
                         accessKey: keyId,
                         secret: secretKey,
                         sessionToken: sessionToken
@@ -67,7 +68,7 @@ public class ServiceHandlerS3 {
                 // provider. Then create a new `S3Client` using those permissions.
 
                 let s3Config = try await S3Client.S3ClientConfiguration(
-                    credentialsProvider: credentialsProvider,
+                    awsCredentialIdentityResolver: awsCredentialIdentityResolver,
                     region: self.region
                 )
                 s3Client = S3Client(config: s3Config)
@@ -95,8 +96,8 @@ public class ServiceHandlerS3 {
             // to generate a static credentials provider suitable for use when
             // initializing an Amazon S3 client.
 
-            let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(
-                AWSClientRuntime.Credentials(
+            let awsCredentialIdentityResolver = try StaticAWSCredentialIdentityResolver(
+                AWSCredentialIdentity(
                     accessKey: accessKeyId,
                     secret: secretAccessKey,
                     sessionToken: sessionToken
@@ -107,7 +108,7 @@ public class ServiceHandlerS3 {
             // credentials.
 
             let s3Config = try await S3Client.S3ClientConfiguration(
-                credentialsProvider: credentialsProvider,
+                awsCredentialIdentityResolver: awsCredentialIdentityResolver,
                 region: self.region
             )
             s3Client = S3Client(config: s3Config)
