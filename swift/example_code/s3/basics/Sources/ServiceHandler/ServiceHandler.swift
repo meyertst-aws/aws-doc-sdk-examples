@@ -18,18 +18,24 @@ import Smithy
 public class ServiceHandler {
     let client: S3Client
     
+    enum HandlerError: Error {
+        case getObjectBody
+        case readGetObjectBody
+    }
+
+    
     /// Initialize and return a new ``ServiceHandler`` object, which is used to drive the AWS calls
     /// used for the example.
     ///
     /// - Returns: A new ``ServiceHandler`` object, ready to be called to
     ///            execute AWS operations.
     // snippet-start:[s3.swift.basics.handler.init]
-    public init() async {
+    public init() async throws {
         do {
-            client = try S3Client(region: "us-east-2")
+            client = try await S3Client()
         } catch {
             print("ERROR: ", dump(error, name: "Initializing S3 client"))
-            exit(1)
+            throw error
         }
     }
     // snippet-end:[s3.swift.basics.handler.init]
@@ -48,7 +54,19 @@ public class ServiceHandler {
             bucket: name,
             createBucketConfiguration: config
         )
-        _ = try await client.createBucket(input: input)
+        
+        do {
+            _ = try await client.createBucket(input: input)
+        }
+        catch (let error as BucketAlreadyOwnedByYou) {
+            print("The bucket '\(name)' already exists and is owned by you. You may wish to ignore this exception.")
+            throw error
+        }
+        catch {
+            print("ERROR: ", dump(error, name: "Creating a bucket"))
+            throw error
+
+        }
     }
     // snippet-end:[s3.swift.basics.handler.createbucket]
 
@@ -59,8 +77,15 @@ public class ServiceHandler {
         let input = DeleteBucketInput(
             bucket: name
         )
-        _ = try await client.deleteBucket(input: input)
-    }
+        do {
+            _ = try await client.deleteBucket(input: input)
+        }
+        catch {
+            print("ERROR: ", dump(error, name: "Deleting a bucket"))
+            throw error
+
+        }
+   }
     // snippet-end:[s3.swift.basics.handler.deletebucket]
 
     /// Upload a file from local storage to the bucket.
@@ -69,17 +94,25 @@ public class ServiceHandler {
     ///   - key: Name of the file to create.
     ///   - file: Path name of the file to upload.
     // snippet-start:[s3.swift.basics.handler.uploadfile]
-    public func uploadFile(bucket: String, key: String, file: String) async throws {
+    public func uploadFile(bucket: String, key: String, file: String) async throws{
         let fileUrl = URL(fileURLWithPath: file)
+        do {
         let fileData = try Data(contentsOf: fileUrl)
         let dataStream = ByteStream.data(fileData)
-
+        
         let input = PutObjectInput(
             body: dataStream,
             bucket: bucket,
             key: key
         )
-        _ = try await client.putObject(input: input)
+        
+
+            _ = try await client.putObject(input: input)
+        }
+        catch {
+            print("ERROR: ", dump(error, name: "Putting an object."))
+            throw error
+        }
     }
     // snippet-end:[s3.swift.basics.handler.uploadfile]
 
@@ -93,14 +126,21 @@ public class ServiceHandler {
     // snippet-start:[s3.swift.basics.handler.createfile]
     public func createFile(bucket: String, key: String, withData data: Data) async throws {
         let dataStream = ByteStream.data(data)
-
+        
         let input = PutObjectInput(
             body: dataStream,
             bucket: bucket,
             key: key
         )
-        _ = try await client.putObject(input: input)
-    }
+        
+        do {
+            _ = try await client.putObject(input: input)
+        }
+        catch {
+            print("ERROR: ", dump(error, name: "Putting an object."))
+            throw error
+        }
+}
     // snippet-end:[s3.swift.basics.handler.createfile]
 
     /// Download the named file to the given directory on the local device.
@@ -118,14 +158,26 @@ public class ServiceHandler {
             bucket: bucket,
             key: key
         )
-        let output = try await client.getObject(input: input)
+        do {
+            let output = try await client.getObject(input: input)
 
-        // Get the data stream object. Return immediately if there isn't one.
-        guard let body = output.body,
-              let data = try await body.readData() else {
-            return
+
+        guard let body = output.body else {
+            throw HandlerError.getObjectBody
         }
+        
+        guard let data = try await body.readData() else {
+            throw HandlerError.readGetObjectBody
+        }
+    
+        
         try data.write(to: fileUrl)
+        }
+        catch {
+            print("ERROR: ", dump(error, name: "Downloading a file."))
+            throw error
+
+        }
     }
     // snippet-end:[s3.swift.basics.handler.downloadfile]
 

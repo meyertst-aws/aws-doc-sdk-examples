@@ -62,11 +62,11 @@ struct ExampleCommand: ParsableCommand {
     /// example.
     // snippet-start:[s3.swift.basics.command.runasync]
     func runAsync() async throws {
-        let serviceHandler = await ServiceHandler()
+        let serviceHandler = try await ServiceHandler()
 
         // 1. Create the bucket.
         print("Creating the bucket \(bucketName)...")
-        try await serviceHandler.createBucket(name: bucketName)
+        try await serviceHandler.createBucket(name: bucketName)        
 
         // 2. Upload a file to the bucket.
         print("Uploading the file \(uploadSource)...")
