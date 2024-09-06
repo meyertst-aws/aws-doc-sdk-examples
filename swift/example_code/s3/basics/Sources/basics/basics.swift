@@ -18,9 +18,10 @@
 
 // snippet-start:[s3.swift.basics.example]
 // snippet-start:[s3.swift.basics.main.imports]
+import ArgumentParser
 import Foundation
 import ServiceHandler
-import ArgumentParser
+
 // snippet-end:[s3.swift.basics.main.imports]
 
 /// The command-line arguments and options available for this
@@ -66,7 +67,7 @@ struct ExampleCommand: ParsableCommand {
 
         // 1. Create the bucket.
         print("Creating the bucket \(bucketName)...")
-        try await serviceHandler.createBucket(name: bucketName)        
+        try await serviceHandler.createBucket(name: bucketName)
 
         // 2. Upload a file to the bucket.
         print("Uploading the file \(uploadSource)...")
@@ -81,7 +82,6 @@ struct ExampleCommand: ParsableCommand {
         try await serviceHandler.copyFile(from: bucketName, name: objName, to: destBucket)
 
         // 5. List the contents of the bucket.
-
         print("Getting a list of the files in the bucket \(bucketName)")
         let fileList = try await serviceHandler.listBucketFiles(bucket: bucketName)
         let numFiles = fileList.count
@@ -95,7 +95,6 @@ struct ExampleCommand: ParsableCommand {
         }
 
         // 6. Delete the objects from the bucket.
-
         print("Deleting the file \(objName) from the bucket \(bucketName)...")
         try await serviceHandler.deleteFile(bucket: bucketName, key: objName)
         print("Deleting the file \(objName) from the bucket \(destBucket)...")
@@ -109,6 +108,7 @@ struct ExampleCommand: ParsableCommand {
     }
     // snippet-end:[s3.swift.basics.command.runasync]
 }
+
 // snippet-end:[s3.swift.basics.command]
 
 //
@@ -126,7 +126,8 @@ struct Main {
         } catch {
             ExampleCommand.exit(withError: error)
         }
-    }    
+    }
 }
+
 // snippet-end:[s3.swift.basics.main]
 // snippet-end:[s3.swift.basics.example]
