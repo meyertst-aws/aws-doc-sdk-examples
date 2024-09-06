@@ -34,8 +34,7 @@ public class ServiceHandler {
     // snippet-start:[s3.swift.basics.handler.init]
     public init() async throws {
         do {
-            configuration = try await S3Client.S3ClientConfiguration()
-            configuration.region = "us-west-2"
+            configuration = try await S3Client.S3ClientConfiguration()    
             client = S3Client(config: configuration)
         }
         catch {
@@ -284,23 +283,27 @@ public class ServiceHandler {
             let input = ListObjectsV2Input(
                 bucket: bucket
             )
-            let output = try await client.listObjectsV2(input: input)
+            let output = client.listObjectsV2Paginated(input: input)
             var names: [String] = []
             
-            guard let objList = output.contents else {
-                throw HandlerError.missingContents("ListBuckets returned nil contents.")
-            }
-            
-            for obj in objList {
-                if let objName = obj.key {
-                    names.append(objName)
+            for try await page in output {
+                guard let objList = page.contents else {
+                    print("ERROR: listObjectsV2Paginated returned nil contents.")
+                    continue
+                }
+                
+                for obj in objList {
+                    if let objName = obj.key {
+                        names.append(objName)
+                    }
                 }
             }
+            
             
             return names
         }
         catch {
-            print("ERROR: ", dump(error, name: "Listing buckets."))
+            print("ERROR: ", dump(error, name: "Listing objects."))
             throw error
         }
     }

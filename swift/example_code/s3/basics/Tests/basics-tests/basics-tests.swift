@@ -33,8 +33,7 @@ final class BasicsTests: XCTestCase {
         
 
         Task() {
- //           await SDKLoggingSystem().initialize(logLevel: .error)
-            BasicsTests.serviceHandler = await ServiceHandler()
+            BasicsTests.serviceHandler = try await ServiceHandler()
             BasicsTests.demoCleanup = await S3DemoCleanup()
             tdSem.signal()
         }
