@@ -34,34 +34,34 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `javav
 - [Hello KMS key](src/main/java/com/example/kms/HelloKMS.java#L6) (`listKeysPaginator`)
 
 
+### Basics
+
+Code examples that show you how to perform the essential operations within a service.
+
+- [Learn KMS key core operations](src/main/java/com/example/kms/scenario/KMSScenario.java)
+
+
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
 
-- [CreateAlias](src/main/java/com/example/kms/scenario/KMSScenario.java#L636)
-- [CreateGrant](src/main/java/com/example/kms/scenario/KMSScenario.java#L592)
-- [CreateKey](src/main/java/com/example/kms/scenario/KMSScenario.java#L682)
-- [Decrypt](src/main/java/com/example/kms/scenario/KMSScenario.java#L529)
-- [DeleteAlias](src/main/java/com/example/kms/scenario/KMSScenario.java#L489)
-- [DescribeKey](src/main/java/com/example/kms/scenario/KMSScenario.java#L505)
-- [DisableKey](src/main/java/com/example/kms/scenario/KMSScenario.java#L322)
-- [EnableKey](src/main/java/com/example/kms/scenario/KMSScenario.java#L703)
-- [Encrypt](src/main/java/com/example/kms/scenario/KMSScenario.java#L657)
-- [ListAliases](src/main/java/com/example/kms/scenario/KMSScenario.java#L302)
-- [ListGrants](src/main/java/com/example/kms/scenario/KMSScenario.java#L566)
-- [ListKeyPolicies](src/main/java/com/example/kms/scenario/KMSScenario.java#L399)
+- [CreateAlias](src/main/java/com/example/kms/scenario/KMSActions.java#L221)
+- [CreateGrant](src/main/java/com/example/kms/scenario/KMSActions.java#L313)
+- [CreateKey](src/main/java/com/example/kms/scenario/KMSActions.java#L112)
+- [Decrypt](src/main/java/com/example/kms/scenario/KMSActions.java#L423)
+- [DeleteAlias](src/main/java/com/example/kms/scenario/KMSActions.java#L620)
+- [DescribeKey](src/main/java/com/example/kms/scenario/KMSActions.java#L135)
+- [DisableKey](src/main/java/com/example/kms/scenario/KMSActions.java#L642)
+- [EnableKey](src/main/java/com/example/kms/scenario/KMSActions.java#L165)
+- [Encrypt](src/main/java/com/example/kms/scenario/KMSActions.java#L194)
+- [ListAliases](src/main/java/com/example/kms/scenario/KMSActions.java#L254)
+- [ListGrants](src/main/java/com/example/kms/scenario/KMSActions.java#L353)
+- [ListKeyPolicies](src/main/java/com/example/kms/scenario/KMSActions.java#L506)
 - [ListKeys](src/main/java/com/example/kms/HelloKMS.java#L6)
-- [RevokeGrant](src/main/java/com/example/kms/scenario/KMSScenario.java#L548)
-- [ScheduleKeyDeletion](src/main/java/com/example/kms/scenario/KMSScenario.java#L471)
-- [Sign](src/main/java/com/example/kms/scenario/KMSScenario.java#L338)
-- [TagResource](src/main/java/com/example/kms/scenario/KMSScenario.java#L376)
-
-### Scenarios
-
-Code examples that show you how to accomplish a specific task by calling multiple
-functions within the same service.
-
-- [Learn KMS key core operations](src/main/java/com/example/kms/scenario/KMSScenario.java)
+- [RevokeGrant](src/main/java/com/example/kms/scenario/KMSActions.java#L385)
+- [ScheduleKeyDeletion](src/main/java/com/example/kms/scenario/KMSActions.java#L664)
+- [Sign](src/main/java/com/example/kms/scenario/KMSActions.java#L532)
+- [TagResource](src/main/java/com/example/kms/scenario/KMSActions.java#L592)
 
 
 <!--custom.examples.start-->
@@ -80,7 +80,6 @@ functions within the same service.
 This example shows you how to get started using KMS key.
 
 
-
 #### Learn KMS key core operations
 
 This example shows you how to do the following:
@@ -93,12 +92,13 @@ This example shows you how to do the following:
 - Tag keys.
 - Delete KMS keys.
 
-<!--custom.scenario_prereqs.kms_Scenario_Basics.start-->
-<!--custom.scenario_prereqs.kms_Scenario_Basics.end-->
+<!--custom.basic_prereqs.kms_Scenario_Basics.start-->
+<!--custom.basic_prereqs.kms_Scenario_Basics.end-->
 
 
-<!--custom.scenarios.kms_Scenario_Basics.start-->
-<!--custom.scenarios.kms_Scenario_Basics.end-->
+<!--custom.basics.kms_Scenario_Basics.start-->
+<!--custom.basics.kms_Scenario_Basics.end-->
+
 
 ### Tests
 

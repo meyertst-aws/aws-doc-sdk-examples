@@ -17,7 +17,7 @@ ssm_Hello:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -45,6 +45,17 @@ ssm_DescribeParameters:
                 - ssm.rust.describe-parameters
   services:
     ssm: {DescribeParameters}
+ssm_GetParameter:
+  languages:
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rustv1/examples/ssm
+          excerpts:
+            - snippet_tags:
+                - ec2.rust.ssm_list_path.impl
+  services:
+    ssm: {GetParameter}
 ssm_PutParameter:
   languages:
     Java:
@@ -81,7 +92,7 @@ ssm_CreateOpsItem:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -104,7 +115,7 @@ ssm_UpdateMaintenanceWindow:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -127,7 +138,7 @@ ssm_CreateMaintenanceWindow:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -150,7 +161,7 @@ ssm_SendCommand:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -164,7 +175,7 @@ ssm_ListCommandInvocations:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -187,7 +198,7 @@ ssm_CreateDocument:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -210,7 +221,7 @@ ssm_DescribeOpsItems:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -224,7 +235,7 @@ ssm_DeleteOpsItem:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -247,7 +258,7 @@ ssm_DeleteMaintenanceWindow:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -270,7 +281,7 @@ ssm_DeleteDocument:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -293,7 +304,7 @@ ssm_UpdateOpsItem:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description:
               snippet_tags:
@@ -302,10 +313,8 @@ ssm_UpdateOpsItem:
   services:
     ssm: {UpdateOpsItem}
 ssm_Scenario:
-  title: Get started with &SYS; using an &AWS; SDK
-  title_abbrev: Get started with &SYS;
   synopsis: work with &SYS; maintenance windows, documents, and OpsItems.
-  category: Scenarios
+  category: Basics
   languages:
     Java:
       versions:
@@ -316,11 +325,14 @@ ssm_Scenario:
             - description:
               snippet_tags:
                 - ssm.java2.scenario.main
+            - description: A wrapper class for &SYS; SDK methods.
+              snippet_tags:
+                - ssm.java2.actions.main    
     Python:
       versions:
         - sdk_version: 3
           github: python/example_code/ssm
-          sdkguide:
+          genai: some
           excerpts:
             - description: Run an interactive scenario at a command prompt.
               snippet_tags:

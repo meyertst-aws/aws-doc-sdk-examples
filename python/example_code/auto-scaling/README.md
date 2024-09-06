@@ -39,21 +39,28 @@ python -m pip install -r requirements.txt
 - [Hello Auto Scaling](hello/hello_autoscaling.py#L4) (`DescribeAutoScalingGroups`)
 
 
+### Basics
+
+Code examples that show you how to perform the essential operations within a service.
+
+- [Learn the basics](scenario_groups_and_instances.py)
+
+
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
 
-- [AttachLoadBalancerTargetGroups](../../cross_service/resilient_service/auto_scaler.py#L535)
-- [CreateAutoScalingGroup](action_wrapper.py#L30)
-- [DeleteAutoScalingGroup](../../cross_service/resilient_service/auto_scaler.py#L562)
-- [DescribeAutoScalingGroups](action_wrapper.py#L113)
-- [DescribeAutoScalingInstances](action_wrapper.py#L195)
-- [DescribeScalingActivities](action_wrapper.py#L220)
-- [DisableMetricsCollection](action_wrapper.py#L271)
-- [EnableMetricsCollection](action_wrapper.py#L248)
-- [SetDesiredCapacity](action_wrapper.py#L169)
-- [TerminateInstanceInAutoScalingGroup](action_wrapper.py#L139)
-- [UpdateAutoScalingGroup](action_wrapper.py#L67)
+- [AttachLoadBalancerTargetGroups](../../cross_service/resilient_service/auto_scaler.py#L615)
+- [CreateAutoScalingGroup](action_wrapper.py#L31)
+- [DeleteAutoScalingGroup](../../cross_service/resilient_service/auto_scaler.py#L656)
+- [DescribeAutoScalingGroups](action_wrapper.py#L167)
+- [DescribeAutoScalingInstances](action_wrapper.py#L284)
+- [DescribeScalingActivities](action_wrapper.py#L317)
+- [DisableMetricsCollection](action_wrapper.py#L399)
+- [EnableMetricsCollection](action_wrapper.py#L359)
+- [SetDesiredCapacity](action_wrapper.py#L248)
+- [TerminateInstanceInAutoScalingGroup](action_wrapper.py#L204)
+- [UpdateAutoScalingGroup](action_wrapper.py#L92)
 
 ### Scenarios
 
@@ -61,7 +68,6 @@ Code examples that show you how to accomplish a specific task by calling multipl
 functions within the same service.
 
 - [Build and manage a resilient service](../../cross_service/resilient_service/runner.py)
-- [Manage groups and instances](scenario_groups_and_instances.py)
 
 
 <!--custom.examples.start-->
@@ -82,6 +88,30 @@ This example shows you how to get started using Auto Scaling.
 ```
 python hello/hello_autoscaling.py
 ```
+
+#### Learn the basics
+
+This example shows you how to do the following:
+
+- Create an Amazon EC2 Auto Scaling group with a launch template and Availability Zones, and get information about running instances.
+- Enable Amazon CloudWatch metrics collection.
+- Update the group's desired capacity and wait for an instance to start.
+- Terminate an instance in the group.
+- List scaling activities that occur in response to user requests and capacity changes.
+- Get statistics for CloudWatch metrics, then clean up resources.
+
+<!--custom.basic_prereqs.auto-scaling_Scenario_GroupsAndInstances.start-->
+<!--custom.basic_prereqs.auto-scaling_Scenario_GroupsAndInstances.end-->
+
+Start the example by running the following at a command prompt:
+
+```
+python scenario_groups_and_instances.py
+```
+
+
+<!--custom.basics.auto-scaling_Scenario_GroupsAndInstances.start-->
+<!--custom.basics.auto-scaling_Scenario_GroupsAndInstances.end-->
 
 
 #### Build and manage a resilient service
@@ -109,30 +139,6 @@ python ../../cross_service/resilient_service/runner.py
 Complete details and instructions on how to run this example can be found in the
 [README](../../cross_service/resilient_service/README.md) for the example.
 <!--custom.scenarios.cross_ResilientService.end-->
-
-#### Manage groups and instances
-
-This example shows you how to do the following:
-
-- Create an Amazon EC2 Auto Scaling group with a launch template and Availability Zones, and get information about running instances.
-- Enable Amazon CloudWatch metrics collection.
-- Update the group's desired capacity and wait for an instance to start.
-- Terminate an instance in the group.
-- List scaling activities that occur in response to user requests and capacity changes.
-- Get statistics for CloudWatch metrics, then clean up resources.
-
-<!--custom.scenario_prereqs.auto-scaling_Scenario_GroupsAndInstances.start-->
-<!--custom.scenario_prereqs.auto-scaling_Scenario_GroupsAndInstances.end-->
-
-Start the example by running the following at a command prompt:
-
-```
-python scenario_groups_and_instances.py
-```
-
-
-<!--custom.scenarios.auto-scaling_Scenario_GroupsAndInstances.start-->
-<!--custom.scenarios.auto-scaling_Scenario_GroupsAndInstances.end-->
 
 ### Tests
 

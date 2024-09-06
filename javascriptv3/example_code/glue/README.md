@@ -34,6 +34,13 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `javas
 - [Hello AWS Glue](hello.js#L6) (`ListJobs`)
 
 
+### Basics
+
+Code examples that show you how to perform the essential operations within a service.
+
+- [Learn the basics](scenarios/basic/steps/start-crawler.js)
+
+
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
@@ -55,13 +62,6 @@ Code excerpts that show you how to call individual service functions.
 - [StartCrawler](actions/start-crawler.js#L6)
 - [StartJobRun](actions/start-job-run.js#L6)
 
-### Scenarios
-
-Code examples that show you how to accomplish a specific task by calling multiple
-functions within the same service.
-
-- [Get started with crawlers and jobs](scenarios/basic/steps/start-crawler.js)
-
 
 <!--custom.examples.start-->
 <!--custom.examples.end-->
@@ -80,10 +80,21 @@ node ./actions/<fileName>
 ```
 
 **Run a scenario**
+
 Most scenarios can be run with the following command:
 ```bash
 node ./scenarios/<fileName>
 ```
+
+**Run with options**
+
+Some actions and scenarios can be run with options from the command line:
+```bash
+node ./scenarios/<fileName> --option1 --option2
+```
+[util.parseArgs](https://nodejs.org/api/util.html#utilparseargsconfig) is used to configure
+these options. For the specific options available to each script, see the `parseArgs` usage
+for that file.
 
 <!--custom.instructions.start-->
 <!--custom.instructions.end-->
@@ -96,8 +107,7 @@ This example shows you how to get started using AWS Glue.
 node ./hello.js
 ```
 
-
-#### Get started with crawlers and jobs
+#### Learn the basics
 
 This example shows you how to do the following:
 
@@ -106,12 +116,13 @@ This example shows you how to do the following:
 - Create a job to extract CSV data from the S3 bucket, transform the data, and load JSON-formatted output into another S3 bucket.
 - List information about job runs, view transformed data, and clean up resources.
 
-<!--custom.scenario_prereqs.glue_Scenario_GetStartedCrawlersJobs.start-->
-<!--custom.scenario_prereqs.glue_Scenario_GetStartedCrawlersJobs.end-->
+<!--custom.basic_prereqs.glue_Scenario_GetStartedCrawlersJobs.start-->
+<!--custom.basic_prereqs.glue_Scenario_GetStartedCrawlersJobs.end-->
 
 
-<!--custom.scenarios.glue_Scenario_GetStartedCrawlersJobs.start-->
-<!--custom.scenarios.glue_Scenario_GetStartedCrawlersJobs.end-->
+<!--custom.basics.glue_Scenario_GetStartedCrawlersJobs.start-->
+<!--custom.basics.glue_Scenario_GetStartedCrawlersJobs.end-->
+
 
 ### Tests
 

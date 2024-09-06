@@ -1804,8 +1804,6 @@ dynamodb_Usage_DaxDemo:
   services:
     dynamodb: {CreateTable, PutItem, GetItem, Query, Scan, DeleteTable}
 dynamodb_Scenario_GettingStartedMovies:
-  title: Get started with &DDB; tables, items, and queries using an &AWS; SDK
-  title_abbrev: Get started with tables, items, and queries
   synopsis_list:
     - Create a table that can hold movie data.
     - Put, get, and update a single movie in the table.
@@ -1813,7 +1811,7 @@ dynamodb_Scenario_GettingStartedMovies:
     - Query for movies that were released in a given year.
     - Scan for movies that were released in a range of years.
     - Delete a movie from the table, then delete the table.
-  category: Scenarios
+  category: Basics
   languages:
     .NET:
       versions:
@@ -2309,5 +2307,23 @@ dynamodb_MidLevelInterface:
             - description: Query and scan a table using a document model.
               snippet_tags:
                 - dynamodb.dotnetv3.MidLevelQueryAndScanExample
+  services:
+    dynamodb: {}
+dynamodb_local:
+  title: Connect to a local &DDB; instance using an &AWS; SDK
+  title_abbrev: Connect to a local instance
+  synopsis: override an endpoint URL to connect to a local development deployment of &DDB; and an &AWS; SDK.
+  guide_topic:
+    title: DynamoDB Local
+    url: amazondynamodb/latest/developerguide/DynamoDBLocal.html
+  category: Scenarios
+  languages:
+    Rust:
+      versions:
+        - sdk_version: 1
+          github: rustv1/examples/dynamodb
+          excerpts:
+            - snippet_files:
+                - rustv1/examples/dynamodb/src/bin/list-tables-local.rs
   services:
     dynamodb: {}

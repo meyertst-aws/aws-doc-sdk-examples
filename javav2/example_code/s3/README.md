@@ -34,32 +34,40 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `javav
 - [Hello Amazon S3](src/main/java/com/example/s3/HelloS3.java#L6) (`ListBuckets`)
 
 
+### Basics
+
+Code examples that show you how to perform the essential operations within a service.
+
+- [Learn the basics](src/main/java/com/example/s3/scenario/S3Scenario.java)
+
+
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
 
-- [CopyObject](src/main/java/com/example/s3/CopyObject.java#L6)
-- [CreateBucket](src/main/java/com/example/s3/CreateBucket.java#L6)
-- [DeleteBucket](src/main/java/com/example/s3/S3BucketOps.java#L79)
+- [CopyObject](src/main/java/com/example/s3/scenario/S3Actions.java#L203)
+- [CreateBucket](src/main/java/com/example/s3/scenario/S3Actions.java#L85)
+- [DeleteBucket](src/main/java/com/example/s3/scenario/S3Actions.java#L342)
 - [DeleteBucketPolicy](src/main/java/com/example/s3/DeleteBucketPolicy.java#L6)
 - [DeleteBucketWebsite](src/main/java/com/example/s3/DeleteWebsiteConfiguration.java#L6)
+- [DeleteObject](src/main/java/com/example/s3/scenario/S3Actions.java#L315)
 - [DeleteObjects](src/main/java/com/example/s3/DeleteMultiObjects.java#L6)
 - [GetBucketAcl](src/main/java/com/example/s3/GetAcl.java#L6)
 - [GetBucketPolicy](src/main/java/com/example/s3/GetBucketPolicy.java#L6)
-- [GetObject](src/main/java/com/example/s3/GetObjectData.java#L6)
+- [GetObject](src/main/java/com/example/s3/scenario/S3Actions.java#L144)
 - [GetObjectLegalHold](src/main/java/com/example/s3/lockscenario/S3LockActions.java#L94)
 - [GetObjectLockConfiguration](src/main/java/com/example/s3/lockscenario/S3LockActions.java#L345)
 - [GetObjectRetention](src/main/java/com/example/s3/lockscenario/S3LockActions.java#L309)
 - [HeadObject](src/main/java/com/example/s3/GetObjectContentType.java#L6)
 - [ListBuckets](src/main/java/com/example/s3/ListBuckets.java#L6)
 - [ListMultipartUploads](src/main/java/com/example/s3/ListMultipartUploads.java#L6)
-- [ListObjectsV2](src/main/java/com/example/s3/ListObjects.java#L6)
+- [ListObjectsV2](src/main/java/com/example/s3/scenario/S3Actions.java#L177)
 - [PutBucketAcl](src/main/java/com/example/s3/SetAcl.java#L6)
 - [PutBucketCors](src/main/java/com/example/s3/S3Cors.java#L6)
 - [PutBucketLifecycleConfiguration](src/main/java/com/example/s3/LifecycleConfiguration.java#L6)
 - [PutBucketPolicy](src/main/java/com/example/s3/SetBucketPolicy.java#L6)
 - [PutBucketWebsite](src/main/java/com/example/s3/SetWebsiteConfiguration.java#L6)
-- [PutObject](src/main/java/com/example/s3/PutObject.java#L6)
+- [PutObject](src/main/java/com/example/s3/scenario/S3Actions.java#L120)
 - [PutObjectLegalHold](src/main/java/com/example/s3/lockscenario/S3LockActions.java#L255)
 - [PutObjectLockConfiguration](src/main/java/com/example/s3/lockscenario/S3LockActions.java#L206)
 - [PutObjectRetention](src/main/java/com/example/s3/lockscenario/S3LockActions.java#L61)
@@ -73,7 +81,6 @@ functions within the same service.
 
 - [Delete incomplete multipart uploads](src/main/java/com/example/s3/AbortMultipartUploadExamples.java)
 - [Download objects to a local directory](src/main/java/com/example/s3/transfermanager/DownloadToDirectory.java)
-- [Get started with buckets and objects](src/main/java/com/example/s3/S3Scenario.java)
 - [Get the legal hold configuration of an object](src/main/java/com/example/s3/lockscenario/S3LockActions.java)
 - [Lock Amazon S3 objects](src/main/java/com/example/s3/lockscenario/S3ObjectLockWorkflow.java)
 - [Parse URIs](src/main/java/com/example/s3/ParseUri.java)
@@ -88,8 +95,8 @@ functions within the same service.
 
 
 <!--custom.examples.start-->
-- [Create a presigned URL for download](s3/src/main/java/com/example/s3/GeneratePresignedGetUrlAndRetrieve.java)
-- [Create a presigned URL for upload](s3/src/main/java/com/example/s3/GeneratePresignedUrlAndPutFileWithMetadata.java)
+- [Create a presigned URL for download](src/main/java/com/example/s3/GeneratePresignedGetUrlAndRetrieve.java)
+- [Create a presigned URL for upload](src/main/java/com/example/s3/GeneratePresignedUrlAndPutFileWithMetadata.java)
 <!--custom.examples.end-->
 
 ## Run the examples
@@ -104,6 +111,23 @@ functions within the same service.
 
 This example shows you how to get started using Amazon S3.
 
+
+#### Learn the basics
+
+This example shows you how to do the following:
+
+- Create a bucket and upload a file to it.
+- Download an object from a bucket.
+- Copy an object to a subfolder in a bucket.
+- List the objects in a bucket.
+- Delete the bucket objects and the bucket.
+
+<!--custom.basic_prereqs.s3_Scenario_GettingStarted.start-->
+<!--custom.basic_prereqs.s3_Scenario_GettingStarted.end-->
+
+
+<!--custom.basics.s3_Scenario_GettingStarted.start-->
+<!--custom.basics.s3_Scenario_GettingStarted.end-->
 
 
 #### Delete incomplete multipart uploads
@@ -129,23 +153,6 @@ This example shows you how to download all objects in an Amazon Simple Storage S
 
 <!--custom.scenarios.s3_DownloadBucketToDirectory.start-->
 <!--custom.scenarios.s3_DownloadBucketToDirectory.end-->
-
-#### Get started with buckets and objects
-
-This example shows you how to do the following:
-
-- Create a bucket and upload a file to it.
-- Download an object from a bucket.
-- Copy an object to a subfolder in a bucket.
-- List the objects in a bucket.
-- Delete the bucket objects and the bucket.
-
-<!--custom.scenario_prereqs.s3_Scenario_GettingStarted.start-->
-<!--custom.scenario_prereqs.s3_Scenario_GettingStarted.end-->
-
-
-<!--custom.scenarios.s3_Scenario_GettingStarted.start-->
-<!--custom.scenarios.s3_Scenario_GettingStarted.end-->
 
 #### Get the legal hold configuration of an object
 

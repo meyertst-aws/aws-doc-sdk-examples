@@ -34,6 +34,13 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `javas
 - [Hello Amazon S3](hello.js#L6) (`ListBuckets`)
 
 
+### Basics
+
+Code examples that show you how to perform the essential operations within a service.
+
+- [Learn the basics](scenarios/basic.js)
+
+
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
@@ -70,7 +77,7 @@ functions within the same service.
 
 - [Create a presigned URL](scenarios/presigned-url-upload.js)
 - [Create a web page that lists Amazon S3 objects](../web/s3/list-objects/src/App.tsx)
-- [Get started with buckets and objects](scenarios/basic.js)
+- [Delete all objects in a bucket](scenarios/delete-all-objects.js)
 - [Get the legal hold configuration of an object](actions/get-object-legal-hold.js)
 - [Lock Amazon S3 objects](scenarios/object-locking/index.js)
 - [Upload or download large files](scenarios/multipart-upload.js)
@@ -93,10 +100,21 @@ node ./actions/<fileName>
 ```
 
 **Run a scenario**
+
 Most scenarios can be run with the following command:
 ```bash
 node ./scenarios/<fileName>
 ```
+
+**Run with options**
+
+Some actions and scenarios can be run with options from the command line:
+```bash
+node ./scenarios/<fileName> --option1 --option2
+```
+[util.parseArgs](https://nodejs.org/api/util.html#utilparseargsconfig) is used to configure
+these options. For the specific options available to each script, see the `parseArgs` usage
+for that file.
 
 <!--custom.instructions.start-->
 
@@ -115,6 +133,23 @@ This example shows you how to get started using Amazon S3.
 ```bash
 node ./hello.js
 ```
+
+#### Learn the basics
+
+This example shows you how to do the following:
+
+- Create a bucket and upload a file to it.
+- Download an object from a bucket.
+- Copy an object to a subfolder in a bucket.
+- List the objects in a bucket.
+- Delete the bucket objects and the bucket.
+
+<!--custom.basic_prereqs.s3_Scenario_GettingStarted.start-->
+<!--custom.basic_prereqs.s3_Scenario_GettingStarted.end-->
+
+
+<!--custom.basics.s3_Scenario_GettingStarted.start-->
+<!--custom.basics.s3_Scenario_GettingStarted.end-->
 
 
 #### Create a presigned URL
@@ -141,22 +176,17 @@ This example shows you how to list Amazon S3 objects in a web page.
 <!--custom.scenarios.s3_Scenario_ListObjectsWeb.start-->
 <!--custom.scenarios.s3_Scenario_ListObjectsWeb.end-->
 
-#### Get started with buckets and objects
+#### Delete all objects in a bucket
 
-This example shows you how to do the following:
-
-- Create a bucket and upload a file to it.
-- Download an object from a bucket.
-- Copy an object to a subfolder in a bucket.
-- List the objects in a bucket.
-- Delete the bucket objects and the bucket.
-
-<!--custom.scenario_prereqs.s3_Scenario_GettingStarted.start-->
-<!--custom.scenario_prereqs.s3_Scenario_GettingStarted.end-->
+This example shows you how to delete all of the objects in an Amazon S3 bucket.
 
 
-<!--custom.scenarios.s3_Scenario_GettingStarted.start-->
-<!--custom.scenarios.s3_Scenario_GettingStarted.end-->
+<!--custom.scenario_prereqs.s3_Scenario_DeleteAllObjects.start-->
+<!--custom.scenario_prereqs.s3_Scenario_DeleteAllObjects.end-->
+
+
+<!--custom.scenarios.s3_Scenario_DeleteAllObjects.start-->
+<!--custom.scenarios.s3_Scenario_DeleteAllObjects.end-->
 
 #### Get the legal hold configuration of an object
 

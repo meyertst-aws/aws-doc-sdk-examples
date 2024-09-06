@@ -31,31 +31,38 @@ For prerequisites, see the [README](../../README.md#Prerequisites) in the `javav
 
 ### Get started
 
-- [Hello Amazon EC2](src/main/java/com/example/ec2/EC2Scenario.java#L556) (`DescribeSecurityGroups`)
+- [Hello Amazon EC2](src/main/java/com/example/ec2/scenario/EC2Actions.java#L468) (`DescribeSecurityGroups`)
+
+
+### Basics
+
+Code examples that show you how to perform the essential operations within a service.
+
+- [Learn the basics](src/main/java/com/example/ec2/scenario/EC2Scenario.java)
 
 
 ### Single actions
 
 Code excerpts that show you how to call individual service functions.
 
-- [AllocateAddress](src/main/java/com/example/ec2/EC2Scenario.java#L350)
-- [AssociateAddress](src/main/java/com/example/ec2/EC2Scenario.java#L331)
-- [AuthorizeSecurityGroupIngress](src/main/java/com/example/ec2/EC2Scenario.java#L577)
-- [CreateKeyPair](src/main/java/com/example/ec2/EC2Scenario.java#L640)
-- [CreateSecurityGroup](src/main/java/com/example/ec2/EC2Scenario.java#L577)
-- [DeleteKeyPair](src/main/java/com/example/ec2/EC2Scenario.java#L281)
-- [DeleteSecurityGroup](src/main/java/com/example/ec2/EC2Scenario.java#L233)
-- [DescribeInstanceTypes](src/main/java/com/example/ec2/EC2Scenario.java#L471)
-- [DescribeInstances](src/main/java/com/example/ec2/DescribeInstances.java#L6)
-- [DescribeKeyPairs](src/main/java/com/example/ec2/EC2Scenario.java#L623)
-- [DescribeSecurityGroups](src/main/java/com/example/ec2/EC2Scenario.java#L556)
-- [DisassociateAddress](src/main/java/com/example/ec2/EC2Scenario.java#L314)
-- [GetPasswordData](src/main/java/com/example/ec2/GetPasswordData.java#L7)
-- [ReleaseAddress](src/main/java/com/example/ec2/EC2Scenario.java#L298)
-- [RunInstances](src/main/java/com/example/ec2/CreateInstance.java#L6)
-- [StartInstances](src/main/java/com/example/ec2/EC2Scenario.java#L368)
-- [StopInstances](src/main/java/com/example/ec2/EC2Scenario.java#L391)
-- [TerminateInstances](src/main/java/com/example/ec2/EC2Scenario.java#L250)
+- [AllocateAddress](src/main/java/com/example/ec2/scenario/EC2Actions.java#L265)
+- [AssociateAddress](src/main/java/com/example/ec2/scenario/EC2Actions.java#L235)
+- [AuthorizeSecurityGroupIngress](src/main/java/com/example/ec2/scenario/EC2Actions.java#L505)
+- [CreateKeyPair](src/main/java/com/example/ec2/scenario/EC2Actions.java#L585)
+- [CreateSecurityGroup](src/main/java/com/example/ec2/scenario/EC2Actions.java#L505)
+- [DeleteKeyPair](src/main/java/com/example/ec2/scenario/EC2Actions.java#L106)
+- [DeleteSecurityGroup](src/main/java/com/example/ec2/scenario/EC2Actions.java#L132)
+- [DescribeInstanceTypes](src/main/java/com/example/ec2/scenario/EC2Actions.java#L356)
+- [DescribeInstances](src/main/java/com/example/ec2/scenario/EC2Actions.java#L402)
+- [DescribeKeyPairs](src/main/java/com/example/ec2/scenario/EC2Actions.java#L566)
+- [DescribeSecurityGroups](src/main/java/com/example/ec2/scenario/EC2Actions.java#L468)
+- [DisassociateAddress](src/main/java/com/example/ec2/scenario/EC2Actions.java#L207)
+- [GetPasswordData](src/main/java/com/example/ec2/GetPasswordData.java#L6)
+- [ReleaseAddress](src/main/java/com/example/ec2/scenario/EC2Actions.java#L184)
+- [RunInstances](src/main/java/com/example/ec2/scenario/EC2Actions.java#L319)
+- [StartInstances](src/main/java/com/example/ec2/scenario/EC2Actions.java#L696)
+- [StopInstances](src/main/java/com/example/ec2/scenario/EC2Actions.java#L653)
+- [TerminateInstances](src/main/java/com/example/ec2/scenario/EC2Actions.java#L155)
 
 ### Scenarios
 
@@ -63,7 +70,6 @@ Code examples that show you how to accomplish a specific task by calling multipl
 functions within the same service.
 
 - [Build and manage a resilient service](../../usecases/resilient_service/src/main/java/com/example/resilient/Main.java)
-- [Get started with instances](src/main/java/com/example/ec2/EC2Scenario.java)
 
 
 <!--custom.examples.start-->
@@ -81,6 +87,23 @@ functions within the same service.
 
 This example shows you how to get started using Amazon EC2.
 
+
+#### Learn the basics
+
+This example shows you how to do the following:
+
+- Create a key pair and security group.
+- Select an Amazon Machine Image (AMI) and compatible instance type, then create an instance.
+- Stop and restart the instance.
+- Associate an Elastic IP address with your instance.
+- Connect to your instance with SSH, then clean up resources.
+
+<!--custom.basic_prereqs.ec2_Scenario_GetStartedInstances.start-->
+<!--custom.basic_prereqs.ec2_Scenario_GetStartedInstances.end-->
+
+
+<!--custom.basics.ec2_Scenario_GetStartedInstances.start-->
+<!--custom.basics.ec2_Scenario_GetStartedInstances.end-->
 
 
 #### Build and manage a resilient service
@@ -100,23 +123,6 @@ This example shows you how to create a load-balanced web service that returns bo
 
 <!--custom.scenarios.cross_ResilientService.start-->
 <!--custom.scenarios.cross_ResilientService.end-->
-
-#### Get started with instances
-
-This example shows you how to do the following:
-
-- Create a key pair and security group.
-- Select an Amazon Machine Image (AMI) and compatible instance type, then create an instance.
-- Stop and restart the instance.
-- Associate an Elastic IP address with your instance.
-- Connect to your instance with SSH, then clean up resources.
-
-<!--custom.scenario_prereqs.ec2_Scenario_GetStartedInstances.start-->
-<!--custom.scenario_prereqs.ec2_Scenario_GetStartedInstances.end-->
-
-
-<!--custom.scenarios.ec2_Scenario_GetStartedInstances.start-->
-<!--custom.scenarios.ec2_Scenario_GetStartedInstances.end-->
 
 ### Tests
 
