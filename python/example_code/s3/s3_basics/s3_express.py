@@ -11,7 +11,11 @@ from boto3 import resource
 from boto3 import client
 from botocore.exceptions import ClientError, ParamValidationError
 
+import boto3
+import inspect
 script_dir = os.path.dirname(os.path.abspath(__file__))
+
+import cProfile, pstats
 
 # Add relative path to include demo_tools in this code example without need for setup.
 sys.path.append(os.path.join(script_dir, "../../.."))
@@ -19,6 +23,14 @@ import demo_tools.question as q
 
 no_art = False  # 'no_art' suppresses 'art' to improve accessibility.
 logger = logging.getLogger(__name__)
+
+# logger_name = "boto3"
+# debug_logger = logging.getLogger(logger_name)
+
+use_press_enter_to_continue = False
+def press_enter_to_continue():
+    if use_press_enter_to_continue:
+        q.ask("Press Enter to continue...")
 
 def print_dashes():
     """
@@ -68,7 +80,7 @@ Directory buckets into your infrastructure, it is best to put your Compute resou
 bucket.
     """
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         # 1. Configure a gateway VPC endpoint. This is the recommended method to allow S3 Express One Zone traffic without
         # the need to pass through an internet gateway or NAT device.
@@ -79,44 +91,44 @@ bucket.
         print(
             "Are you running this in an EC2 instance located in the same AZ as your intended Directory buckets?"
         )
-        if q.ask("Do you want to setup a VPC Endpoint? (y/n) "):
-            print(
-                "Great! Let's set up a VPC, retrieve the Route Table from it, and create a VPC Endpoint to connect the S3 Client to."
-            )
-            self.setup_vpc()
-            q.ask("Press Enter to continue...")
-        else:
-            print("Skipping the VPC setup. Don't forget to use this in production!")
+        # if q.ask("Do you want to setup a VPC Endpoint? (y/n) ", q.is_yesno):
+        #     print(
+        #         "Great! Let's set up a VPC, retrieve the Route Table from it, and create a VPC Endpoint to connect the S3 Client to."
+        #     )
+        #     self.setup_vpc()
+        #     press_enter_to_continue()
+        # else:
+        #     print("Skipping the VPC setup. Don't forget to use this in production!")
 
         print("")
         print("2. Policies, users, and roles with CDK.")
         print(
             "Now, we'll set up some policies, roles, and a user. This user will only have permissions to do S3 Express One Zone actions."
         )
-        q.ask("Press Enter to continue...")
-        stack_name = f"cfn-stack-s3-express-basics--{uuid.uuid4()}"
-        template_as_string = S3ExpressScenario.get_template_as_string()
-        self.stack = self.deploy_cloudformation_stack(stack_name, template_as_string)
-        regular_user_name = None
-        express_user_name = None
-
-        outputs = self.stack.outputs
-        for output in outputs:
-            if output.get("OutputKey") == "RegularUser":
-                regular_user_name = output.get("OutputValue")
-            elif output.get("OutputKey") == "ExpressUser":
-                express_user_name = output.get("OutputValue")
-
-        if not regular_user_name or not express_user_name:
-            error_string = f"""
-            Failed to retrieve required outputs from CloudFormation stack.
-            'regular_user_name'={regular_user_name}, 'express_user_name'={express_user_name}
-            """
-            logger.error(error_string)
-            raise ValueError(error_string)
-
-        regular_credentials = self.create_access_key(regular_user_name)
-        express_credentials = self.create_access_key(express_user_name)
+        press_enter_to_continue()
+        # stack_name = f"cfn-stack-s3-express-basics--{uuid.uuid4()}"
+        # template_as_string = S3ExpressScenario.get_template_as_string()
+        # self.stack = self.deploy_cloudformation_stack(stack_name, template_as_string)
+        # regular_user_name = None
+        # express_user_name = None
+        #
+        # outputs = self.stack.outputs
+        # for output in outputs:
+        #     if output.get("OutputKey") == "RegularUser":
+        #         regular_user_name = output.get("OutputValue")
+        #     elif output.get("OutputKey") == "ExpressUser":
+        #         express_user_name = output.get("OutputValue")
+        #
+        # if not regular_user_name or not express_user_name:
+        #     error_string = f"""
+        #     Failed to retrieve required outputs from CloudFormation stack.
+        #     'regular_user_name'={regular_user_name}, 'express_user_name'={express_user_name}
+        #     """
+        #     logger.error(error_string)
+        #     raise ValueError(error_string)
+        #
+        # regular_credentials = self.create_access_key(regular_user_name)
+        # express_credentials = self.create_access_key(express_user_name)
 
         # 3. Create an additional client using the credentials with S3 Express permissions.
         print("")
@@ -126,20 +138,22 @@ bucket.
         print(
             "This client is created with the credentials associated with the user account with the S3 Express policy attached, so it can perform S3 Express operations."
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
         self.s3_regular_client = client(service_name = "s3", region_name = self.region,
-                                   aws_access_key_id=regular_credentials['AccessKeyId'],
-                                   aws_secret_access_key=regular_credentials['SecretAccessKey'])
+                                   # aws_access_key_id=regular_credentials['AccessKeyId'],
+                                   # aws_secret_access_key=regular_credentials['SecretAccessKey']
+                                        )
         self.s3_express_client = client(service_name="s3", region_name=self.region,
-                                     aws_access_key_id=express_credentials['AccessKeyId'],
-                                     aws_secret_access_key=express_credentials['SecretAccessKey'])
+                                     # aws_access_key_id=express_credentials['AccessKeyId'],
+                                     # aws_secret_access_key=express_credentials['SecretAccessKey']
+                                        )
         print(
             "All the roles and policies were created an attached to the user. Then, a new S3 Client and Service were created using that user's credentials."
         )
         print(
             "We can now use this client to make calls to S3 Express operations. Keeping permissions in mind (and adhering to least-privilege) is crucial to S3 Express."
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         # 4. Create two buckets.
         print("")
@@ -154,8 +168,10 @@ bucket.
             "We'll also create a normal bucket, put an object_key into the normal bucket, and copy it over to the Directory bucket."
         )
         # Create a directory bucket. These are different from normal S3 buckets in subtle ways.
-        bucket_prefix = q.ask("Enter a bucket name prefix that will be used for both buckets: ", q.non_empty)
-        availability_zone = self.select_availability_zone_id(self.region)
+#        bucket_prefix = q.ask("Enter a bucket name prefix that will be used for both buckets: ", q.non_empty)
+#        availability_zone = self.select_availability_zone_id(self.region)
+        bucket_prefix = 's3-express'
+        availability_zone = {'ZoneId': 'use1-az4'}
 
         # Construct the parts of a directory bucket name that is made unique with a UUID string.
         directory_bucket_suffix = f"--{availability_zone['ZoneId']}--x-s3"
@@ -169,11 +185,11 @@ bucket.
                           'Location' : { 'Name' : availability_zone['ZoneId'],
                                          'Type' :  'AvailabilityZone'}
                           }
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
         print(
             "Now, let's create the actual Directory bucket, as well as a regular bucket."
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         self.create_bucket(self.s3_express_client, directory_bucket_name, configuration)
         print(f"Created directory bucket, '{directory_bucket_name}'")
@@ -183,7 +199,7 @@ bucket.
         self.regular_bucket_name = regular_bucket_name
 
         print("Great! Both buckets were created.")
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         # 5. Create an object_key and copy it over.
         print("")
@@ -197,7 +213,7 @@ bucket.
         print(
             "This works fine, because Copy operations are not restricted for Directory buckets."
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         bucket_object = "basic-text-object_key"
         S3ExpressScenario.put_object(self.s3_regular_client, self.regular_bucket_name, bucket_object, "Look Ma, I'm a bucket!")
@@ -212,7 +228,7 @@ bucket.
         print(
             "This allows for much faster connection speeds on every call. For single calls, this is low, but for many concurrent calls, this adds up to a lot of time saved."
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         # 6. Demonstrate performance difference.
         print("")
@@ -220,35 +236,57 @@ bucket.
         print(
             "Now, let's do a performance test. We'll download the same object_key from each bucket $downloads times and compare the total time needed. Note: the performance difference will be much more pronounced if this example is run in an EC2 instance in the same AZ as the bucket."
         )
-        downloads = 1000
+        downloads = 200
         print(f"The number of downloads of the same object_key for this example is set at {downloads}.")
-        if q.ask("Would you like to download a different number? (y/n) ", q.is_yesno):
-            max_downloads = 1000000
-            downloads = q.ask(f"Enter a number between 1 and {max_downloads} for the number of downloads: ", q.is_int, q.in_range(1, len(max_downloads)))
-
+        # if q.ask("Would you like to download a different number? (y/n) ", q.is_yesno):
+        #     max_downloads = 1000000
+        #     downloads = q.ask(f"Enter a number between 1 and {max_downloads} for the number of downloads: ", q.is_int, q.in_range(1, max_downloads))
+        express_profiler = cProfile.Profile()
         # Download the object_key $downloads times from each bucket and time it to demonstrate the speed difference.
         print("Downloading from the Directory bucket.")
+        express_profiler.enable()
         directory_time_start = time.time_ns()
-        for index in range(downloads):
-            if index % 10 == 0:
-                print(f"Download {index} of {downloads}")
-            S3ExpressScenario.get_object(self.s3_express_client, self.directory_bucket_name, bucket_object)
-        directory_time_difference = time.time_ns() - directory_time_start
+        # debug_logger.log(logging.DEBUG, "\n\n\nGetting %s\n\n\n", self.directory_bucket_name)
 
+        for index in range(downloads):
+            # if index % 10 == 0:
+            #     print(f"Download {index} of {downloads}")
+            # one_start = time.time_ns()
+            S3ExpressScenario.get_object(self.s3_express_client, self.directory_bucket_name, bucket_object)
+            # one_end = time.time_ns()
+            # print(f"One time diff {(one_end - one_start) / 1000000} millisec.")
+
+
+        directory_time_difference = time.time_ns() - directory_time_start
+        express_profiler.disable()
+        stats = pstats.Stats(express_profiler).sort_stats('tottime')
+        stats.dump_stats("express_stats.pstat")
+        # debug_logger.log(logging.DEBUG, "\n\n\nGetting %s\n\n\n", self.regular_bucket_name)
         print("Downloading from the normal bucket.")
+
+        regular_profiler = cProfile.Profile()
+        regular_profiler.enable()
         normal_time_start = time.time_ns()
         for index in range(downloads):
-            if index % 10 == 0:
-                print(f"Download {index} of {downloads}")
+            # if index % 10 == 0:
+            #     print(f"Download {index} of {downloads}")
+            # one_start = time.time_ns()
             S3ExpressScenario.get_object(self.s3_regular_client, self.regular_bucket_name, bucket_object)
+            # one_end = time.time_ns()
+            # print(f"One time diff {(one_end - one_start) / 1000000} millisec.")
+
+        # debug_logger.log(logging.DEBUG, "\n\n\nEnd logging\n\n\n", )
 
         normal_time_difference = time.time_ns() - normal_time_start
+        regular_profiler.disable()
+        stats = pstats.Stats(regular_profiler).sort_stats('tottime')
+        stats.dump_stats("regular_stats.psat")
         print(
             f"The directory bucket took {directory_time_difference} nanoseconds, while the normal bucket took {normal_time_difference}."
         )
         print(f"That's a difference of {normal_time_difference - directory_time_difference} nanoseconds, or")
         print(f"{(normal_time_difference - directory_time_difference) / 1000000000} seconds.")
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         # 7. Populate the buckets to show the lexicographical difference.
         print("")
@@ -272,7 +310,7 @@ bucket.
         print(
             "Let's add a few more objects with layered directories as see how the output of ListObjects changes."
         )
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
 
         # Populate a few more files in each bucket so that we can use ListObjects and show the difference.
         other_object = f"other/{bucket_object}"
@@ -305,7 +343,7 @@ bucket.
         print('This is because the normal bucket considers the whole "key" to be the object_key identifies, while the')
         print('directory bucket actually creates directories and uses the object_key "key" as a path to the object_key.')
 
-        q.ask("Press Enter to continue...")
+        press_enter_to_continue()
         print("")
         print(
             "That's it for our tour of the basic operations for S3 Express One Zone."
@@ -642,13 +680,15 @@ bucket.
                 )
 
 if __name__ == "__main__":
+    # logging.basicConfig(filename='s3Express.txt', level=logging.DEBUG)
+    # boto3.set_stream_logger('logger_name', logging.DEBUG)
     s3_express_scenario = None
-    my_s3_client = client("s3")
-    # delete all directory buckets
-    bucket_list = my_s3_client.list_directory_buckets()
-    for bucket in bucket_list["Buckets"]:
-        print(f"Deleting bucket {bucket['Name']}")
-        S3ExpressScenario.delete_bucket_and_objects(my_s3_client, bucket["Name"])
+    # my_s3_client = client("s3")
+    # # delete all directory buckets
+    # bucket_list = my_s3_client.list_directory_buckets()
+    # for bucket in bucket_list["Buckets"]:
+    #     print(f"Deleting bucket {bucket['Name']}")
+    #     S3ExpressScenario.delete_bucket_and_objects(my_s3_client, bucket["Name"])
     try:
         a_cloud_formation_resource = resource("cloudformation")
         an_ec2_client = client("ec2")
