@@ -23,40 +23,12 @@ import s3_express_getting_started
 number_of_uploads = 10
 
 stop_on_index = [
-        ("TESTERROR-stub_create_vpc", 0),
-        ("TESTERROR-stub_describe_route_tables", 1),
-        ("TESTERROR-stub_create_vpc_endpoint", 2),
-        ("TESTERROR-stub_create_stack", 3),
-        ("TESTERROR-stub_describe_stacks", 4),
-        ("TESTERROR-stub_create_access_key_regular", 5),
-        ("TESTERROR-stub_create_access_key_directory", 6),
-        ("TESTERROR-stub_describe_availability_zones", 7),
-        ("TESTERROR-stub_create_bucket_directory", 8),
-        ("TESTERROR-stub_create_bucket_regular", 9),
-        ("TESTERROR-stub_put_object", 10),
-        ("TESTERROR-stub_create_session", 11),
-        ("TESTERROR-stub_copy_object", 12),
+        ("TESTERROR-stub_create_access_key_regular", 0),
+        ("TESTERROR-stub_create_access_key_directory", 1),
+        ("TESTERROR-stub_describe_availability_zones", 2),
+        ("TESTERROR-stub_create_bucket_directory", 3),
+        ("TESTERROR-stub_create_bucket_regular", 4),
     ]
-
-for i in range(len(stop_on_index), len(stop_on_index) + number_of_uploads):
-    stop_on_index.append((f"TESTERROR-stub_get_object_directory", i))
-
-for i in range(len(stop_on_index), len(stop_on_index) + number_of_uploads):
-    stop_on_index.append((f"TESTERROR-stub_get_object_regular", i))
-
-current_stop_on_index_length = len(stop_on_index)
-stop_on_index.extend([
-    ("TESTERROR-stub_put_object_other_object", current_stop_on_index_length),
-    ("TESTERROR-stub_put_object_other_object", current_stop_on_index_length + 1),
-    ("TESTERROR-stub_put_object_alt_object", current_stop_on_index_length + 2),
-    ("TESTERROR-stub_put_object_alt_object", current_stop_on_index_length + 3),
-    ("TESTERROR-stub_put_object_other_alt_object", current_stop_on_index_length + 4),
-    ("TESTERROR-stub_put_object_other_alt_object", current_stop_on_index_length + 5),
-    ("TESTERROR-stub_list_objects_directory", current_stop_on_index_length + 6),
-    ("TESTERROR-stub_list_objects_regular", current_stop_on_index_length + 7),
-    ("TESTERROR-stub_list_objects_directory", current_stop_on_index_length + 8),
-    ("TESTERROR-stub_delete_objects_directory", current_stop_on_index_length + 9),
-])
 
 @pytest.mark.parametrize(
     "error_code, stop_on_index",
@@ -119,12 +91,8 @@ def test_s3_express_scenario(
     object_keys = [object_name, other_object, alt_object, other_alt_object]
 
     inputs = [
-        "y",
         bucket_name_prefix,
         "1",
-        "y",
-        number_of_uploads,
-        "y"
     ]
     monkeypatch.setattr("builtins.input", lambda x: inputs.pop(0))
 
@@ -132,45 +100,12 @@ def test_s3_express_scenario(
 
 
     with stub_runner(error_code, stop_on_index) as runner:
-        runner.add(ec2_stubber.stub_create_vpc, "10.0.0.0/16", vpc_id)
-        runner.add(ec2_stubber.stub_describe_route_tables, filter, vpc_id, route_table_id)
-        runner.add(ec2_stubber.stub_create_vpc_endpoint, vpc_id, route_table_id, service_name)
-        runner.add(cloud_formation_stubber.stub_create_stack, stack_name, template, ["CAPABILITY_NAMED_IAM"], stack_id)
-        runner.add(cloud_formation_stubber.stub_describe_stacks, stack_name, "CREATE_COMPLETE", outputs)
         runner.add(iam_stubber.stub_create_access_key, regular_user_name)
         runner.add(iam_stubber.stub_create_access_key, express_user_name)
         runner.add(ec2_stubber.stub_describe_availability_zones, availability_zone_ids, availability_zone_filter, availability_zone_ids)
         runner.add(s3_stubber.stub_create_bucket, directory_bucket_name, bucket_configuration = directory_bucket_configuration)
         runner.add(s3_stubber.stub_create_bucket, regular_bucket_name)
-        runner.add (s3_stubber.stub_put_object, regular_bucket_name, object_name, "Look Ma, I'm a bucket!")
-        runner.add(s3_stubber.stub_create_session, directory_bucket_name)
-        runner.add (s3_stubber.stub_copy_object, regular_bucket_name, object_name, directory_bucket_name, object_name)
 
-        for _ in range(number_of_uploads):
-            runner.add (s3_stubber.stub_get_object, directory_bucket_name, object_name)
-
-        for _ in range(number_of_uploads):
-            runner.add(s3_stubber.stub_get_object, regular_bucket_name, object_name)
-
-        runner.add (s3_stubber.stub_put_object, regular_bucket_name, other_object, "")
-        runner.add (s3_stubber.stub_put_object, directory_bucket_name, other_object, "")
-        runner.add (s3_stubber.stub_put_object, regular_bucket_name, alt_object, "")
-        runner.add (s3_stubber.stub_put_object, directory_bucket_name, alt_object, "")
-        runner.add (s3_stubber.stub_put_object, regular_bucket_name, other_alt_object, "")
-        runner.add (s3_stubber.stub_put_object, directory_bucket_name, other_alt_object, "")
-
-        runner.add(s3_stubber.stub_list_objects_v2, directory_bucket_name, object_keys)
-        runner.add(s3_stubber.stub_list_objects_v2, regular_bucket_name, object_keys)
-
-        runner.add(s3_stubber.stub_list_objects_v2, directory_bucket_name, object_keys)
-        runner.add(s3_stubber.stub_delete_objects, directory_bucket_name, object_keys)
-
-
-    def mock_wait(self, **kwargs):
-        return
-
-    # Mock the waiters.
-    monkeypatch.setattr(waiter.Waiter, "wait", mock_wait)
 
     scenario = s3_express_getting_started.S3ExpressScenario(cloud_formation_resource, ec2_client,
                                                             iam_client)
@@ -182,11 +117,9 @@ def test_s3_express_scenario(
 
     monkeypatch.setattr(uuid, "uuid4", lambda : my_uuid)
 
-
-
     if error_code is None:
-        scenario.s3_express_scenario()
+        scenario.setup_clients_and_buckets(express_user_name, regular_user_name)
     else:
         with pytest.raises(ClientError) as exc_info:
-            scenario.s3_express_scenario()
+            scenario.setup_clients_and_buckets(express_user_name, regular_user_name)
         assert exc_info.value.response["Error"]["Code"] == error_code
